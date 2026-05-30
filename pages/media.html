@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Media & Downloads — Thekkan Pore Silamba Kalai</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    .downloads-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 30px; }
+    .download-card {
+      background: var(--dark3); border: 1px solid var(--border); padding: 30px;
+      display: flex; align-items: center; gap: 20px; transition: var(--transition);
+      text-decoration: none; color: inherit;
+    }
+    .download-card:hover { border-color: var(--gold); transform: translateX(4px); }
+    .dl-icon { font-size: 36px; flex-shrink: 0; }
+    .dl-title { font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold); margin-bottom: 6px; }
+    .dl-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .dl-tag {
+      display: inline-block; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--border); padding: 4px 10px; margin-top: 10px;
+    }
+    .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px; }
+    .social-card {
+      background: var(--dark3); border: 1px solid var(--border); padding: 24px;
+      text-align: center; transition: var(--transition); text-decoration: none; color: inherit;
+    }
+    .social-card:hover { border-color: var(--gold); }
+    .social-card .s-icon { font-size: 32px; display: block; margin-bottom: 12px; }
+    .social-card h4 { font-family: 'Cinzel', serif; color: var(--text); font-size: 14px; margin-bottom: 6px; }
+    .social-card p { font-size: 12px; color: var(--text-muted); }
+    @media (max-width: 768px) { .downloads-grid { grid-template-columns: 1fr; } .social-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <img src="../images/class-logo.png" alt="Silambam Class Logo" class="nav-class-logo" onerror="this.style.display='none'"/>
+      <div class="nav-logo-text">
+        <span class="logo-tamil">THEKKAN PORE</span>
+        <span class="logo-sub">SILAMBA KALAI</span>
+      </div>
+    </div>
+    <div class="nav-toggle" id="navToggle">☰</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="origin.html">Origin</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="media.html" class="active">Media</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <p class="section-pre">Resources & Connect</p>
+      <h1>Media &amp; <span>Downloads</span></h1>
+    </div>
+  </div>
+
+  <div class="section-block">
+
+    <!-- DOWNLOADS -->
+    <div class="scroll-reveal" style="margin-bottom:80px;">
+      <div class="section-header">
+        <p class="section-pre">Official Documents</p>
+        <h2 class="section-title">Downloads</h2>
+      </div>
+      <div class="downloads-grid">
+        <a href="../pdfs/entry-form.pdf" class="download-card" download>
+          <div class="dl-icon">📄</div>
+          <div>
+            <div class="dl-title">Entry Form</div>
+            <div class="dl-desc">Official enrollment form for new students. Fill, sign, and submit to your nearest branch master.</div>
+            <span class="dl-tag">PDF Download</span>
+          </div>
+        </a>
+        <a href="../pdfs/rules.pdf" class="download-card" download>
+          <div class="dl-icon">📋</div>
+          <div>
+            <div class="dl-title">Rules & Regulations</div>
+            <div class="dl-desc">Competition rules, training code of conduct, and tournament regulations for all participants.</div>
+            <span class="dl-tag">PDF Download</span>
+          </div>
+        </a>
+        <a href="../pdfs/schedule.pdf" class="download-card" download>
+          <div class="dl-icon">📅</div>
+          <div>
+            <div class="dl-title">Training Schedule</div>
+            <div class="dl-desc">Complete training timetable for all 4 branches. Upload this file when available.</div>
+            <span class="dl-tag">PDF Download</span>
+          </div>
+        </a>
+        <a href="../pdfs/syllabus.pdf" class="download-card" download>
+          <div class="dl-icon">📖</div>
+          <div>
+            <div class="dl-title">Grading Syllabus</div>
+            <div class="dl-desc">Techniques and requirements for each level of certification. Upload when available.</div>
+            <span class="dl-tag">PDF Download</span>
+          </div>
+        </a>
+      </div>
+      <p style="color:var(--text-muted);font-size:12px;text-align:center;margin-top:16px;opacity:0.6;">
+        Place PDF files in the /pdfs/ folder: entry-form.pdf, rules.pdf, schedule.pdf, syllabus.pdf
+      </p>
+    </div>
+
+    <!-- SOCIAL MEDIA -->
+    <div class="scroll-reveal" style="margin-bottom:80px;">
+      <div class="section-header">
+        <p class="section-pre">Stay Connected</p>
+        <h2 class="section-title">Follow Us</h2>
+      </div>
+      <div class="social-grid">
+        <a href="https://instagram.com/thekkanporesilambam_otteri" target="_blank" class="social-card">
+          <span class="s-icon">📸</span>
+          <h4>Instagram</h4>
+          <p>@thekkanporesilambam_<br/>Daily training clips & tournament highlights</p>
+        </a>
+        <a href="https://youtube.com/@yourchannel" target="_blank" class="social-card">
+          <span class="s-icon">▶️</span>
+          <h4>YouTube</h4>
+          <p>@yourchannel<br/>Full demonstrations, tutorials & event recordings</p>
+        </a>
+        <a href="https://facebook.com/yourpage" target="_blank" class="social-card">
+          <span class="s-icon">👥</span>
+          <h4>Facebook</h4>
+          <p>Your Page Name<br/>Community updates & event announcements</p>
+        </a>
+      </div>
+      <p style="color:var(--text-muted);font-size:12px;text-align:center;margin-top:16px;opacity:0.6;">
+        Edit media.html to update your actual Instagram, YouTube, and Facebook handles
+      </p>
+    </div>
+
+    <!-- VIDEO EMBED SECTION -->
+    <div class="scroll-reveal">
+      <div class="section-header">
+        <p class="section-pre">Watch</p>
+        <h2 class="section-title">Featured Videos</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div style="background:var(--dark3);border:1px solid var(--border);padding:20px;text-align:center;">
+          <!-- Replace with actual YouTube embed -->
+          <div style="aspect-ratio:16/9;background:var(--dark2);display:flex;align-items:center;justify-content:center;border:1px solid var(--border);margin-bottom:12px;">
+            <p style="color:var(--text-muted);font-size:12px;">Paste YouTube embed iframe here</p>
+          </div>
+          <p style="color:var(--text-muted);font-size:13px;">Video Title — Add your video here</p>
+        </div>
+        <div style="background:var(--dark3);border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="aspect-ratio:16/9;background:var(--dark2);display:flex;align-items:center;justify-content:center;border:1px solid var(--border);margin-bottom:12px;">
+            <p style="color:var(--text-muted);font-size:12px;">Paste YouTube embed iframe here</p>
+          </div>
+          <p style="color:var(--text-muted);font-size:13px;">Video Title — Add your video here</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h2>THEKKAN PORE<br/><span>Silamba Kalai</span></h2>
+        <p>Preserving the warrior tradition of Tamil Nadu since generations.</p>
+        <a href="https://instagram.com/thekkanporesilambakalai" target="_blank" class="insta-link">📸 @thekkanporesilambakalai</a>
+      </div>
+      <div class="footer-links">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="origin.html">Origin</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="training.html">Training</a></li>
+          <li><a href="media.html">Media & Downloads</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-branches">
+        <h4>Branches</h4>
+        <ul>
+          <li><a href="branch1.html">Otteri Extn Branch</a></li>
+          <li><a href="branch2.html">karasangal</a></li>
+          <li><a href="branch3.html">vanchuvanchery</a></li>
+        </ul>
+      </div>
+      <div class="footer-downloads">
+        <h4>Downloads</h4>
+        <a href="../pdfs/entry-form.pdf" class="pdf-btn" download>📄 Entry Form</a>
+        <a href="../pdfs/rules.pdf" class="pdf-btn" download>📄 Rules & Regulations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Thekkan Pore Silamba Kalai. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+</body>
+</html>

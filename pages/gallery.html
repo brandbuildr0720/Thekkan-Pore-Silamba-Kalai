@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery — Thekkan Pore Silamba Kalai</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    .upload-area {
+      border: 2px dashed var(--border);
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .upload-area:hover, .upload-area.dragover {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.05);
+    }
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-area-icon { font-size: 36px; margin-bottom: 10px; }
+    .upload-area-text { font-size: 13px; color: var(--text-muted); }
+    .upload-area-text span { color: var(--gold); }
+    .selected-count {
+      font-size: 12px;
+      color: var(--gold);
+      margin-top: 8px;
+      display: none;
+    }
+    .progress-wrap {
+      display: none;
+      max-width: 500px;
+      margin: 16px auto 0;
+    }
+    .progress-track {
+      height: 8px;
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      border-radius: 4px;
+      transition: width 0.2s ease;
+    }
+    .progress-status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .progress-status span { color: var(--gold); }
+    .gallery-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .photo-count-tag {
+      font-size: 12px;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      padding: 6px 16px;
+      background: var(--dark3);
+    }
+    .recover-btn {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 6px 16px;
+      cursor: pointer;
+      background: var(--dark3);
+      font-family: 'Raleway', sans-serif;
+      transition: var(--transition);
+    }
+    .recover-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .gallery-item .del-btn {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: rgba(139,26,26,0.85);
+      border: 1px solid var(--crimson-light);
+      color: white;
+      font-size: 14px;
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 3;
+      border-radius: 2px;
+    }
+    .gallery-item:hover .del-btn { opacity: 1; }
+    .gallery-item { position: relative; }
+    .upload-form { width: 100%; }
+    .pass-row {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .pass-row input { flex: 1; }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <img src="../images/class-logo.png" alt="Silambam Class Logo" class="nav-class-logo" onerror="this.style.display='none'"/>
+      <div class="nav-logo-text">
+        <span class="logo-tamil">THEKKAN PORE</span>
+        <span class="logo-sub">SILAMBA KALAI</span>
+      </div>
+    </div>
+    <div class="nav-toggle" id="navToggle">☰</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="origin.html">Origin</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <p class="section-pre">Moments of Power & Grace</p>
+      <h1>Our <span>Gallery</span></h1>
+    </div>
+  </div>
+
+  <div class="section-block">
+
+    <!-- UPLOAD BOX -->
+    <div class="upload-section scroll-reveal" id="uploadBox" style="display:none;">
+      <h3>Upload Photos</h3>
+      <p style="margin-bottom:20px;">Photos saved to cloud ☁️ — unlimited, never disappears, works on all devices</p>
+
+      <form class="upload-form" id="uploadForm">
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="photoInput" accept="image/*" multiple/>
+          <div class="upload-area-icon">📸</div>
+          <div class="upload-area-text">
+            <strong style="color:var(--text);">Click to choose photos</strong><br/>
+            or drag and drop here<br/>
+            <span id="selectedCount" class="selected-count"></span>
+          </div>
+        </div>
+
+        <div class="pass-row">
+          <input type="password" id="uploadPass" class="upload-input" placeholder="🔒 Password" autocomplete="off"/>
+          <button type="submit" class="upload-btn" id="uploadBtn">Upload</button>
+        </div>
+
+        <p class="msg-success" id="msgSuccess" style="display:none;margin-top:12px;"></p>
+        <p class="msg-error" id="msgError" style="display:none;margin-top:12px;"></p>
+      </form>
+
+      <!-- Progress -->
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-status">
+          <span id="progressLeft">Uploading...</span>
+          <span id="progressRight">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNLOCK BUTTON -->
+    <div id="unlockRow" style="text-align:center;margin-bottom:30px;">
+      <button class="recover-btn" onclick="showUploadBox()" style="font-size:12px;padding:10px 24px;">
+        🔒 Admin Upload
+      </button>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="scroll-reveal">
+      <div class="gallery-controls">
+        <div>
+          <p class="section-pre" style="margin-bottom:4px;">All Photos</p>
+          <h2 class="section-title" style="font-size:28px;margin-bottom:0;">Tournament &amp; Training Gallery</h2>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <span class="photo-count-tag" id="photoCountTag">Loading...</span>
+          <button class="recover-btn" id="recoverBtn" onclick="recoverFromImgBB()" title="Fetch all your photos from ImgBB account">
+            🔄 Recover Photos
+          </button>
+        </div>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <div id="galleryMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;">
+          ⏳ Loading gallery...
+        </div>
+      </div>
+
+      <div id="loadMoreWrap" style="text-align:center;margin-top:30px;display:none;">
+        <button class="recover-btn" id="loadMoreBtn" style="padding:12px 32px;font-size:12px;">
+          Load More Photos ↓
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h2>THEKKAN PORE<br/><span>Silamba Kalai</span></h2>
+        <p>Preserving the warrior tradition of Tamil Nadu since generations.</p>
+        <a href="https://instagram.com/thekkanporesilambam_otteri" target="_blank" class="insta-link">📸 @thekkanporesilambam_otteri</a>
+      </div>
+      <div class="footer-links">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="origin.html">Origin</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="training.html">Training</a></li>
+          <li><a href="media.html">Media & Downloads</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-branches">
+        <h4>Branches</h4>
+        <ul>
+          <li><a href="branch1.html">Otteri Extn Branch</a></li>
+          <li><a href="branch2.html">karasangal</a></li>
+          <li><a href="branch3.html">vanchuvanchery</a></li>
+        </ul>
+      </div>
+      <div class="footer-downloads">
+        <h4>Downloads</h4>
+        <a href="../pdfs/entry-form.pdf" class="pdf-btn" download>📄 Entry Form</a>
+        <a href="../pdfs/rules.pdf" class="pdf-btn" download>📄 Rules & Regulations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Thekkan Pore Silamba Kalai. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+  // ================================================================
+  //  GALLERY — ImgBB Cloud Storage
+  //  Photos stored on ImgBB servers forever
+  //  Links saved in localStorage in small chunks (never overflows)
+  // ================================================================
+  const IMGBB_KEY  = '680e43bf013aff32c403f0f71c8cdaef';
+  const ADMIN_PASS = '1711';
+  const CHUNK_SIZE = 20; // save 20 photo links per localStorage key
+  const PAGE_SIZE  = 30; // show 30 photos at a time
+
+  let allPhotos   = []; // full list in memory
+  let displayedN  = 0;  // how many rendered so far
+
+  // ── Storage: save/load in chunks ──────────────────────────────
+  function saveAllPhotos(photos) {
+    // Clear old chunks first
+    for (let i = 0; i < 50; i++) localStorage.removeItem('sil_gal_' + i);
+    // Save in chunks of CHUNK_SIZE
+    for (let i = 0; i < photos.length; i += CHUNK_SIZE) {
+      const chunk = photos.slice(i, i + CHUNK_SIZE);
+      localStorage.setItem('sil_gal_' + Math.floor(i / CHUNK_SIZE), JSON.stringify(chunk));
+    }
+    localStorage.setItem('sil_gal_total', photos.length);
+  }
+
+  function loadAllPhotos() {
+    const total = parseInt(localStorage.getItem('sil_gal_total') || '0');
+    if (!total) return [];
+    const result = [];
+    for (let i = 0; i < Math.ceil(total / CHUNK_SIZE); i++) {
+      try {
+        const chunk = JSON.parse(localStorage.getItem('sil_gal_' + i) || '[]');
+        result.push(...chunk);
+      } catch(e) {}
+    }
+    return result;
+  }
+
+  // ── Render one photo card ──────────────────────────────────────
+  function renderCard(photo) {
+    const grid = document.getElementById('galleryGrid');
+    const msg  = document.getElementById('galleryMsg');
+    if (msg) msg.remove();
+
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.dataset.id = photo.id;
+    const thumb = photo.thumb || photo.url;
+
+    item.innerHTML = `
+      <img src="${thumb}" alt="Gallery" loading="lazy" style="opacity:1;display:block;"/>
+      <div class="gallery-item-overlay">
+        <span onclick="openLightbox('${photo.url}')" style="font-size:10px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;border:1px solid var(--gold);padding:5px 12px;cursor:pointer;background:rgba(0,0,0,0.4);">🔍 View</span>
+      </div>
+      <div class="del-btn" title="Delete" onclick="deletePhoto('${photo.id}', this)">🗑</div>`;
+
+    item.querySelector('img').addEventListener('click', () => openLightbox(photo.url));
+    // Fade in smoothly
+    item.style.opacity = '0';
+    item.style.transition = 'opacity 0.4s ease';
+    grid.appendChild(item);
+    requestAnimationFrame(() => { item.style.opacity = '1'; });
+  }
+
+  function deletePhoto(id, btn) {
+    const pw = prompt('Enter admin password to delete:');
+    if (pw !== ADMIN_PASS) { alert('Wrong password!'); return; }
+    allPhotos = allPhotos.filter(p => p.id !== id);
+    saveAllPhotos(allPhotos);
+    const card = btn.closest('.gallery-item');
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.8)';
+    card.style.transition = 'all 0.3s ease';
+    setTimeout(() => { card.remove(); updateCount(); }, 300);
+  }
+
+  // ── Render next PAGE_SIZE photos ──────────────────────────────
+  function renderNextPage() {
+    const batch = allPhotos.slice(displayedN, displayedN + PAGE_SIZE);
+    batch.forEach(p => renderCard(p));
+    displayedN += batch.length;
+    updateCount();
+    // Show/hide load more
+    const loadMoreWrap = document.getElementById('loadMoreWrap');
+    if (displayedN < allPhotos.length) {
+      loadMoreWrap.style.display = 'block';
+      document.getElementById('loadMoreBtn').textContent =
+        `Load More Photos ↓ (${allPhotos.length - displayedN} remaining)`;
+    } else {
+      loadMoreWrap.style.display = 'none';
+    }
+  }
+
+  function updateCount() {
+    const el = document.getElementById('photoCountTag');
+    if (el) el.textContent = allPhotos.length + ' photo' + (allPhotos.length !== 1 ? 's' : '');
+  }
+
+  // ── Load gallery on page open ──────────────────────────────────
+  function loadGallery() {
+    allPhotos  = loadAllPhotos();
+    displayedN = 0;
+    const msg  = document.getElementById('galleryMsg');
+    if (allPhotos.length === 0) {
+      if (msg) msg.innerHTML = '📸 No photos yet.<br/><small style="font-size:12px;opacity:0.6;">Upload photos above, or click 🔄 Recover Photos if you uploaded before.</small>';
+      updateCount();
+      return;
+    }
+    renderNextPage();
+  }
+
+  document.getElementById('loadMoreBtn').addEventListener('click', renderNextPage);
+
+  // ── Upload to ImgBB ────────────────────────────────────────────
+  async function uploadOneFile(file) {
+    const fd = new FormData();
+    fd.append('image', file);
+    const res  = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.error?.message || 'Upload failed');
+    return {
+      id:    json.data.id,
+      url:   json.data.url,
+      thumb: json.data.thumb?.url || json.data.display_url
+    };
+  }
+
+  // ── Recover: fetch all photos from ImgBB account ──────────────
+  async function recoverFromImgBB() {
+    const btn = document.getElementById('recoverBtn');
+    btn.textContent = '⏳ Recovering...';
+    btn.disabled = true;
+    try {
+      // ImgBB API: get all images for this API key (account)
+      let page = 1, fetched = [], hasMore = true;
+      while (hasMore) {
+        const res  = await fetch(`https://api.imgbb.com/1/account/images?key=${IMGBB_KEY}&page=${page}&perpage=100`);
+        const json = await res.json();
+        if (!json.success || !json.data || json.data.length === 0) { hasMore = false; break; }
+        json.data.forEach(img => {
+          fetched.push({ id: img.id, url: img.url, thumb: img.thumb?.url || img.display_url });
+        });
+        if (json.data.length < 100) hasMore = false;
+        page++;
+      }
+      if (fetched.length === 0) {
+        alert('No photos found in your ImgBB account. They may have been deleted from ImgBB.');
+        btn.textContent = '🔄 Recover Photos';
+        btn.disabled = false;
+        return;
+      }
+      // Merge with existing (avoid duplicates)
+      const existingIds = new Set(allPhotos.map(p => p.id));
+      const newOnes = fetched.filter(p => !existingIds.has(p.id));
+      allPhotos = [...newOnes, ...allPhotos];
+      saveAllPhotos(allPhotos);
+      // Re-render
+      document.getElementById('galleryGrid').innerHTML = '<div id="galleryMsg" style="display:none"></div>';
+      displayedN = 0;
+      renderNextPage();
+      alert(`✅ Recovered ${fetched.length} photos! (${newOnes.length} new)`);
+    } catch(err) {
+      alert('Recovery failed: ' + err.message + '\n\nMake sure you are on GitHub Pages (not local file).');
+    }
+    btn.textContent = '🔄 Recover Photos';
+    btn.disabled = false;
+  }
+
+  // ── Show upload box ────────────────────────────────────────────
+  function showUploadBox() {
+    const pw = prompt('Enter admin password to access upload:');
+    if (pw !== ADMIN_PASS) { alert('Wrong password!'); return; }
+    document.getElementById('uploadBox').style.display = 'block';
+    document.getElementById('unlockRow').style.display = 'none';
+    document.getElementById('uploadBox').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── File input — show selected count ──────────────────────────
+  document.getElementById('photoInput').addEventListener('change', function() {
+    const el = document.getElementById('selectedCount');
+    el.textContent = `✅ ${this.files.length} photo${this.files.length !== 1 ? 's' : ''} selected`;
+    el.style.display = 'block';
+  });
+
+  // Drag and drop
+  const area = document.getElementById('uploadArea');
+  area.addEventListener('dragover',  (e) => { e.preventDefault(); area.classList.add('dragover'); });
+  area.addEventListener('dragleave', ()  => area.classList.remove('dragover'));
+  area.addEventListener('drop', (e) => {
+    e.preventDefault();
+    area.classList.remove('dragover');
+    document.getElementById('photoInput').files = e.dataTransfer.files;
+    const el = document.getElementById('selectedCount');
+    el.textContent = `✅ ${e.dataTransfer.files.length} photo(s) selected`;
+    el.style.display = 'block';
+  });
+
+  // ── Submit upload ──────────────────────────────────────────────
+  document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const pass = document.getElementById('uploadPass').value;
+    const msgS = document.getElementById('msgSuccess');
+    const msgE = document.getElementById('msgError');
+    const btn  = document.getElementById('uploadBtn');
+    const progWrap = document.getElementById('progressWrap');
+    const fill = document.getElementById('progressFill');
+    const pLeft  = document.getElementById('progressLeft');
+    const pRight = document.getElementById('progressRight');
+
+    msgS.style.display = 'none';
+    msgE.style.display = 'none';
+
+    if (pass !== ADMIN_PASS) {
+      msgE.textContent = '❌ Wrong password.';
+      msgE.style.display = 'block';
+      setTimeout(() => msgE.style.display = 'none', 3000);
+      return;
+    }
+
+    const files = Array.from(document.getElementById('photoInput').files);
+    if (!files.length) {
+      msgE.textContent = '❌ Please select photos first.';
+      msgE.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Uploading...';
+    progWrap.style.display = 'block';
+
+    let done = 0, failed = 0;
+    const newPhotos = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const pct = Math.round((i / files.length) * 100);
+      fill.style.width = pct + '%';
+      pLeft.textContent  = `Uploading ${i + 1} of ${files.length} photos — do NOT refresh!`;
+      pRight.textContent = pct + '%';
+
+      try {
+        const photo = await uploadOneFile(files[i]);
+        newPhotos.push(photo);
+        // Save after EVERY photo — prepend only the one new photo, not the whole newPhotos array
+        allPhotos = [photo, ...allPhotos];
+        saveAllPhotos(allPhotos);
+        // Render immediately at top of grid
+        renderCard(photo);
+        document.getElementById('galleryGrid').insertBefore(
+          document.getElementById('galleryGrid').lastElementChild,
+          document.getElementById('galleryGrid').firstElementChild
+        );
+        displayedN++;
+        updateCount();
+        done++;
+      } catch(err) {
+        console.error('Failed:', files[i].name, err.message);
+        failed++;
+      }
+    }
+
+    fill.style.width = '100%';
+    pLeft.textContent  = `✅ Done! ${done} uploaded${failed ? ', ' + failed + ' failed' : ''}`;
+    pRight.textContent = '100%';
+
+    btn.disabled = false;
+    btn.textContent = 'Upload';
+    document.getElementById('uploadForm').reset();
+    document.getElementById('selectedCount').style.display = 'none';
+
+    if (done > 0) {
+      msgS.textContent = `✅ ${done} photo${done > 1 ? 's' : ''} uploaded and saved forever! ☁️`;
+      msgS.style.display = 'block';
+    }
+    if (failed > 0) {
+      msgE.textContent = `⚠️ ${failed} photo(s) failed. Check internet and try again.`;
+      msgE.style.display = 'block';
+    }
+    setTimeout(() => {
+      progWrap.style.display = 'none';
+      msgS.style.display = 'none';
+      msgE.style.display = 'none';
+    }, 8000);
+  });
+
+  // ── Deduplicate any already-saved duplicates ──────────────────
+  function deduplicateSaved() {
+    const photos = loadAllPhotos();
+    const seen = new Set();
+    const unique = photos.filter(p => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
+      return true;
+    });
+    if (unique.length !== photos.length) {
+      saveAllPhotos(unique);
+      console.log(`Deduped: removed ${photos.length - unique.length} duplicate(s)`);
+    }
+  }
+
+  // ── Start ──────────────────────────────────────────────────────
+  deduplicateSaved();
+  loadGallery();
+  </script>
+</body>
+</html>

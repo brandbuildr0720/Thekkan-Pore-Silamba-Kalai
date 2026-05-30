@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thekkan Pore Silamba Kalai</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <img src="images/class-logo.png" alt="Silambam Class Logo" class="nav-class-logo" onerror="this.style.display='none'"/>
+      <div class="nav-logo-text">
+        <span class="logo-tamil">THEKKAN PORE</span>
+        <span class="logo-sub">SILAMBA KALAI</span>
+      </div>
+    </div>
+    <div class="nav-toggle" id="navToggle">☰</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="pages/origin.html">Origin</a></li>
+      <li><a href="pages/gallery.html">Gallery</a></li>
+      <li><a href="pages/training.html">Training</a></li>
+      <li><a href="pages/media.html">Media</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO BANNER -->
+  <header class="hero-banner">
+    <div class="hero-banner-img">
+      <img src="images/banner.jpg" alt="Thekkan Pore Silamba Kalai Banner" onerror="this.style.display='none'"/>
+    </div>
+    <div class="hero-banner-overlay"></div>
+  </header>
+
+  <!-- PROFILE SECTION (YouTube-style) -->
+  <div class="profile-section">
+    <div class="profile-logo-wrap">
+      <img src="images/profile-logo.png" alt="Thekkan Pore Silamba Kalai" class="profile-logo" onerror="this.src='images/class-logo.png'"/>
+    </div>
+    <div class="profile-info">
+      <h1 class="profile-name">THEKKAN PORE <span>Silamba Kalai</span></h1>
+      <p class="profile-tagline">PAYINDRU..! PAYITRUVI..!</p>
+      <a href="#masters" class="hero-btn">Meet the Masters</a>
+    </div>
+  </div>
+
+  <!-- ABOUT STRIP -->
+  <section class="about-strip">
+    <div class="strip-item">
+      <span class="strip-num">4</span>
+      <span class="strip-label">Masters</span>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">
+      <span class="strip-num">3</span>
+      <span class="strip-label">Branches</span>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">
+      <span class="strip-num">∞</span>
+      <span class="strip-label">Heritage</span>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">
+      <span class="strip-num">1</span>
+      <span class="strip-label">Legacy</span>
+    </div>
+  </section>
+
+  <!-- GRAND MASTERS SECTION -->
+  <section class="masters-section" id="grandmasters" style="padding-bottom:20px;">
+    <div class="section-header">
+      <p class="section-pre">Our Roots</p>
+      <h2 class="section-title">The Grand Masters</h2>
+      <p class="section-desc">The legendary teachers who passed down the ancient art of Thekkan Pore Silambam to our masters</p>
+    </div>
+    <div style="display:flex;justify-content:center;gap:60px;flex-wrap:wrap;margin-top:40px;">
+
+      <!-- Grand Master 1 -->
+      <div class="scroll-reveal" style="text-align:center;">
+        <div style="width:180px;height:180px;border-radius:8px;overflow:hidden;border:2px solid var(--gold);margin:0 auto 18px;box-shadow:0 0 30px rgba(201,168,76,0.2);">
+          <img src="images/grandmaster1.jpg" alt="Grand Master 1"
+            onerror="this.src='images/placeholder.jpg'"
+            style="width:100%;height:100%;object-fit:cover;"/>
+        </div>
+        <h3 style="font-family:'Cinzel',serif;font-size:16px;color:var(--text);margin-bottom:6px;">மதார் ராவுத்தர்</h3>
+        <p style="font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;">Grand Master (LATE)</p>
+      </div>
+
+      <!-- Grand Master 2 -->
+      <div class="scroll-reveal" style="text-align:center;">
+        <div style="width:180px;height:180px;border-radius:8px;overflow:hidden;border:2px solid var(--gold);margin:0 auto 18px;box-shadow:0 0 30px rgba(201,168,76,0.2);">
+          <img src="images/grandmaster2.jpg" alt="Grand Master 2"
+            onerror="this.src='images/placeholder.jpg'"
+            style="width:100%;height:100%;object-fit:cover;"/>
+        </div>
+        <h3 style="font-family:'Cinzel',serif;font-size:16px;color:var(--text);margin-bottom:6px;">J.சாகுல் ஹமீது</h3>
+        <p style="font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;">Grand Master</p>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:50px;border-bottom:1px solid var(--border);padding-bottom:0;"></div>
+  </section>
+
+  <!-- MASTERS SECTION -->
+  <section class="masters-section" id="masters">
+    <div class="section-header">
+      <p class="section-pre">Our Pillars</p>
+      <h2 class="section-title">The Masters & Their Branches</h2>
+      <p class="section-desc">Click on a master to explore their branch, story, and gallery</p>
+    </div>
+    <div class="masters-grid masters-grid-3">
+
+      <!-- BRANCH I — 2 Masters side by side -->
+      <div class="master-card branch1-double" onclick="window.location='pages/branch1.html'" data-branch="1">
+        <div class="card-glow"></div>
+        <!-- Double photo row -->
+        <div class="double-img-row">
+          <div class="double-img-wrap">
+            <img src="images/master1.jpg" alt="Master 1" onerror="this.src='images/placeholder.jpg'" />
+            <div class="double-name">Thamim Ansari S</div>
+          </div>
+          <div class="double-divider"></div>
+          <div class="double-img-wrap">
+            <img src="images/master2.jpg" alt="Master 2" onerror="this.src='images/placeholder.jpg'" />
+            <div class="double-name">Jaipoon Nisha S</div>
+          </div>
+          <div class="card-overlay">
+            <span class="card-cta">Enter Branch →</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <span class="card-branch">Otteri Extn Branch</span>
+          <h3 class="card-name" style="font-size:16px;">Thamim Ansari S &amp; Jaipoon Nisha S</h3>
+          <p class="card-location">📍 Otteri Extn, Chennai</p>
+          <div class="card-border-line"></div>
+          <p class="card-desc">Two masters, one tradition. Chief instructors and founders of Otteri Extn Branch, dedicated to preserving ancient silambam forms.</p>
+        </div>
+      </div>
+
+      <!-- BRANCH II — Master 3 -->
+      <div class="master-card" onclick="window.location='pages/branch2.html'" data-branch="2">
+        <div class="card-glow"></div>
+        <div class="card-img-wrap">
+          <img src="images/master3.jpg" alt="Master 3" onerror="this.src='images/placeholder.jpg'" />
+          <div class="card-overlay">
+            <span class="card-cta">Enter Branch →</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <span class="card-branch">karasangal</span>
+          <h3 class="card-name">Rasool Mohideen M</h3>
+          <p class="card-location">📍 Karasangal, Chennai</p>
+          <div class="card-border-line"></div>
+          <p class="card-desc">Specialises in competitive silambam, producing state-level champions year after year.</p>
+        </div>
+      </div>
+
+      <!-- BRANCH III — Master 4 -->
+      <div class="master-card" onclick="window.location='pages/branch3.html'" data-branch="3">
+        <div class="card-glow"></div>
+        <div class="card-img-wrap">
+          <img src="images/master4.jpg" alt="Master 4" onerror="this.src='images/placeholder.jpg'" />
+          <div class="card-overlay">
+            <span class="card-cta">Enter Branch →</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <span class="card-branch">vanchuvanchery</span>
+          <h3 class="card-name">Lakshmanan A</h3>
+          <p class="card-location">📍 Vanchuvanchery, Chennai</p>
+          <div class="card-border-line"></div>
+          <p class="card-desc">Focuses on youth development and cultural education through the martial art form.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- QUOTE BANNER -->
+  <section class="quote-banner">
+    <div class="quote-inner">
+      <span class="quote-mark">"</span>
+      <p class="quote-text">The stick is not just a weapon — it is an extension of the soul, trained through generations of warriors.</p>
+      <span class="quote-author">— Thekkan Pore Tradition —  </span>
+    </div>
+  </section>
+
+  <!-- QUICK LINKS -->
+  <section class="quick-links">
+    <a href="pages/origin.html" class="ql-card">
+      <div class="ql-icon">🏛️</div>
+      <h3>Our Origin</h3>
+      <p>Discover the ancient roots of Thekkan Pore Silambam</p>
+    </a>
+    <a href="pages/gallery.html" class="ql-card">
+      <div class="ql-icon">🖼️</div>
+      <h3>Gallery</h3>
+      <p>Moments of discipline, power, and grace</p>
+    </a>
+       </a>
+    <a href="pages/contact.html" class="ql-card">
+      <div class="ql-icon">📍</div>
+      <h3>Find Us</h3>
+      <p>All 4 branch locations and contact details</p>
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h2>THEKKAN PORE<br/><span>Silamba Kalai</span></h2>
+        <p>Preserving the warrior tradition of Tamil Nadu since generations.</p>
+        <a href="https://instagram.com/thekkanporesilambam_otteri" target="_blank" class="insta-link">📸 @thekkanporesilambam_otteri</a>
+      </div>
+      <div class="footer-links">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="pages/origin.html">Origin</a></li>
+          <li><a href="pages/gallery.html">Gallery</a></li>
+          <li><a href="pages/training.html">Training</a></li>
+          <li><a href="pages/media.html">Media & Downloads</a></li>
+          <li><a href="pages/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-branches">
+        <h4>Branches</h4>
+        <ul>
+          <li><a href="pages/branch1.html">Otteri Extn Branch</a></li>
+          <li><a href="pages/branch2.html">karasangal</a></li>
+          <li><a href="pages/branch3.html">vanchuvanchery</a></li>
+        </ul>
+      </div>
+      <div class="footer-downloads">
+        <h4>Downloads</h4>
+        <a href="pdfs/entry-form.pdf" class="pdf-btn" download>📄 Entry Form</a>
+        <a href="pdfs/rules.pdf" class="pdf-btn" download>📄 Rules & Regulations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Thekkan Pore Silamba Kalai. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
