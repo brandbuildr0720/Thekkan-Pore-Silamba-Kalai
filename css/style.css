@@ -1383,3 +1383,21 @@ img { max-width: 100%; }
   word-break: break-word;
   overflow-wrap: break-word;
 }
+
+/* ===== ORIGIN PAGE — content + sidebar grid ===== */
+.origin-content-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .origin-content-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  /* Move Key Techniques sidebar below the main text naturally */
+  .origin-content-grid > div:last-child {
+    order: 2;
+  }
+}
