@@ -30,96 +30,62 @@
     }
     .upload-area-icon { font-size: 36px; margin-bottom: 10px; }
     .upload-area-text { font-size: 13px; color: var(--text-muted); }
-    .upload-area-text span { color: var(--gold); }
-    .selected-count {
-      font-size: 12px;
-      color: var(--gold);
-      margin-top: 8px;
-      display: none;
-    }
-    .progress-wrap {
-      display: none;
-      max-width: 500px;
-      margin: 16px auto 0;
-    }
+    .upload-area-text strong { color: var(--text); }
+    .selected-count { font-size: 12px; color: var(--gold); margin-top: 8px; display: none; }
+    .progress-wrap { display: none; max-width: 500px; margin: 16px auto 0; }
     .progress-track {
-      height: 8px;
-      background: var(--dark2);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 10px;
+      height: 8px; background: var(--dark2);
+      border: 1px solid var(--border); border-radius: 4px;
+      overflow: hidden; margin-bottom: 10px;
     }
     .progress-fill {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       background: linear-gradient(90deg, var(--gold-dark), var(--gold));
-      border-radius: 4px;
-      transition: width 0.2s ease;
+      border-radius: 4px; transition: width 0.2s ease;
     }
-    .progress-status {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+    .progress-status { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
     .progress-status span { color: var(--gold); }
     .gallery-controls {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 12px;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
     }
     .photo-count-tag {
-      font-size: 12px;
-      color: var(--gold);
+      font-size: 12px; color: var(--gold);
       border: 1px solid var(--border);
-      padding: 6px 16px;
-      background: var(--dark3);
+      padding: 6px 16px; background: var(--dark3);
     }
     .recover-btn {
-      font-size: 11px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      padding: 6px 16px;
-      cursor: pointer;
-      background: var(--dark3);
-      font-family: 'Raleway', sans-serif;
+      font-size: 11px; letter-spacing: 1px;
+      color: var(--text-muted); border: 1px solid var(--border);
+      padding: 6px 16px; cursor: pointer;
+      background: var(--dark3); font-family: 'Raleway', sans-serif;
       transition: var(--transition);
     }
     .recover-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .gallery-item { position: relative; }
     .gallery-item .del-btn {
-      position: absolute;
-      top: 8px; right: 8px;
+      position: absolute; top: 8px; right: 8px;
       background: rgba(139,26,26,0.85);
       border: 1px solid var(--crimson-light);
-      color: white;
-      font-size: 14px;
+      color: white; font-size: 14px;
       width: 30px; height: 30px;
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s;
-      z-index: 3;
-      border-radius: 2px;
+      cursor: pointer; opacity: 0; transition: opacity 0.2s;
+      z-index: 3; border-radius: 2px;
     }
-    .gallery-item:hover .del-btn { opacity: 1; }
-    .gallery-item { position: relative; }
+    .gallery-item:hover .del-btn,
+    .gallery-item:active .del-btn { opacity: 1; }
     .upload-form { width: 100%; }
-    .pass-row {
-      display: flex;
-      gap: 12px;
-      max-width: 500px;
-      margin: 0 auto;
-    }
+    .pass-row { display: flex; gap: 12px; max-width: 500px; margin: 0 auto; }
     .pass-row input { flex: 1; }
+    @media (max-width: 480px) {
+      .pass-row { flex-direction: column; }
+      .gallery-controls { flex-direction: column; align-items: flex-start; }
+    }
   </style>
 </head>
 <body>
-  <canvas id="particles"></canvas>
   <nav class="navbar" id="navbar">
     <div class="nav-logo">
       <img src="../images/class-logo.png" alt="Silambam Class Logo" class="nav-class-logo" onerror="this.style.display='none'"/>
@@ -148,36 +114,29 @@
 
   <div class="section-block">
 
-    <!-- UPLOAD BOX -->
+    <!-- UPLOAD BOX (hidden until admin unlocks) -->
     <div class="upload-section scroll-reveal" id="uploadBox" style="display:none;">
       <h3>Upload Photos</h3>
-      <p style="margin-bottom:20px;">Photos saved to cloud ☁️ — unlimited, never disappears, works on all devices</p>
-
+      <p style="margin-bottom:20px;">Photos saved to cloud ☁️ — visible on every device, forever</p>
       <form class="upload-form" id="uploadForm">
         <div class="upload-area" id="uploadArea">
           <input type="file" id="photoInput" accept="image/*" multiple/>
           <div class="upload-area-icon">📸</div>
           <div class="upload-area-text">
-            <strong style="color:var(--text);">Click to choose photos</strong><br/>
+            <strong>Tap to choose photos</strong><br/>
             or drag and drop here<br/>
             <span id="selectedCount" class="selected-count"></span>
           </div>
         </div>
-
         <div class="pass-row">
-          <input type="password" id="uploadPass" class="upload-input" placeholder="🔒 Password" autocomplete="off"/>
+          <input type="password" id="uploadPass" class="upload-input" placeholder="🔒 Admin Password" autocomplete="off"/>
           <button type="submit" class="upload-btn" id="uploadBtn">Upload</button>
         </div>
-
-        <p class="msg-success" id="msgSuccess" style="display:none;margin-top:12px;"></p>
-        <p class="msg-error" id="msgError" style="display:none;margin-top:12px;"></p>
+        <p class="msg-success" id="msgSuccess" style="display:none;margin-top:12px;text-align:center;"></p>
+        <p class="msg-error"   id="msgError"   style="display:none;margin-top:12px;text-align:center;"></p>
       </form>
-
-      <!-- Progress -->
       <div class="progress-wrap" id="progressWrap">
-        <div class="progress-track">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
         <div class="progress-status">
           <span id="progressLeft">Uploading...</span>
           <span id="progressRight">0%</span>
@@ -185,26 +144,21 @@
       </div>
     </div>
 
-    <!-- UNLOCK BUTTON -->
+    <!-- ADMIN UNLOCK BUTTON -->
     <div id="unlockRow" style="text-align:center;margin-bottom:30px;">
-      <button class="recover-btn" onclick="showUploadBox()" style="font-size:12px;padding:10px 24px;">
+      <button class="recover-btn" id="unlockBtn" style="font-size:12px;padding:10px 24px;">
         🔒 Admin Upload
       </button>
     </div>
 
-    <!-- GALLERY -->
+    <!-- GALLERY GRID -->
     <div class="scroll-reveal">
       <div class="gallery-controls">
         <div>
           <p class="section-pre" style="margin-bottom:4px;">All Photos</p>
           <h2 class="section-title" style="font-size:28px;margin-bottom:0;">Tournament &amp; Training Gallery</h2>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <span class="photo-count-tag" id="photoCountTag">Loading...</span>
-          <button class="recover-btn" id="recoverBtn" onclick="recoverFromImgBB()" title="Fetch all your photos from ImgBB account">
-            🔄 Recover Photos
-          </button>
-        </div>
+        <span class="photo-count-tag" id="photoCountTag">Loading...</span>
       </div>
 
       <div class="gallery-grid" id="galleryGrid">
@@ -222,6 +176,12 @@
 
   </div>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightboxClose">✕</span>
+    <img id="lbImg" src="" alt=""/>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-top">
       <div class="footer-brand">
@@ -235,7 +195,7 @@
           <li><a href="origin.html">Origin</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="training.html">Training</a></li>
-          <li><a href="media.html">Media & Downloads</a></li>
+          <li><a href="media.html">Media &amp; Downloads</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
@@ -250,7 +210,7 @@
       <div class="footer-downloads">
         <h4>Downloads</h4>
         <a href="../pdfs/entry-form.pdf" class="pdf-btn" download>📄 Entry Form</a>
-        <a href="../pdfs/rules.pdf" class="pdf-btn" download>📄 Rules & Regulations</a>
+        <a href="../pdfs/rules.pdf" class="pdf-btn" download>📄 Rules &amp; Regulations</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -258,48 +218,63 @@
     </div>
   </footer>
 
-  <script src="../js/main.js"></script>
+  <!-- NAVBAR JS (inline so no external file needed) -->
   <script>
+  // ── Navbar scroll + toggle ────────────────────────────────────
+  const navbar    = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  const navLinks  = document.getElementById('navLinks');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  document.addEventListener('click', (e) => {
+    if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) navLinks.classList.remove('open');
+  });
+
+  // ── Scroll reveal ─────────────────────────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+  // ── Lightbox ──────────────────────────────────────────────────
+  const lightbox = document.getElementById('lightbox');
+  function openLightbox(src) { document.getElementById('lbImg').src = src; lightbox.classList.add('open'); }
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+
   // ================================================================
-  //  GALLERY — ImgBB Cloud Storage
-  //  Photos stored on ImgBB servers forever
-  //  Links saved in localStorage in small chunks (never overflows)
+  //  GALLERY — ImgBB Cloud (photos visible on ALL devices)
+  //  Upload → ImgBB server → URL saved in localStorage
+  //  Anyone who opens the site sees the same photos via ImgBB URLs
   // ================================================================
   const IMGBB_KEY  = '680e43bf013aff32c403f0f71c8cdaef';
   const ADMIN_PASS = '1711';
-  const CHUNK_SIZE = 20; // save 20 photo links per localStorage key
-  const PAGE_SIZE  = 30; // show 30 photos at a time
+  const CHUNK_SIZE = 20;
+  const PAGE_SIZE  = 30;
 
-  let allPhotos   = []; // full list in memory
-  let displayedN  = 0;  // how many rendered so far
+  let allPhotos  = [];
+  let displayedN = 0;
 
-  // ── Storage: save/load in chunks ──────────────────────────────
+  // ── Storage helpers ───────────────────────────────────────────
   function saveAllPhotos(photos) {
-    // Clear old chunks first
-    for (let i = 0; i < 50; i++) localStorage.removeItem('sil_gal_' + i);
-    // Save in chunks of CHUNK_SIZE
+    for (let i = 0; i < 100; i++) localStorage.removeItem('sil_gal_' + i);
     for (let i = 0; i < photos.length; i += CHUNK_SIZE) {
-      const chunk = photos.slice(i, i + CHUNK_SIZE);
-      localStorage.setItem('sil_gal_' + Math.floor(i / CHUNK_SIZE), JSON.stringify(chunk));
+      localStorage.setItem('sil_gal_' + Math.floor(i / CHUNK_SIZE), JSON.stringify(photos.slice(i, i + CHUNK_SIZE)));
     }
     localStorage.setItem('sil_gal_total', photos.length);
   }
-
   function loadAllPhotos() {
     const total = parseInt(localStorage.getItem('sil_gal_total') || '0');
     if (!total) return [];
     const result = [];
     for (let i = 0; i < Math.ceil(total / CHUNK_SIZE); i++) {
-      try {
-        const chunk = JSON.parse(localStorage.getItem('sil_gal_' + i) || '[]');
-        result.push(...chunk);
-      } catch(e) {}
+      try { result.push(...JSON.parse(localStorage.getItem('sil_gal_' + i) || '[]')); } catch(e) {}
     }
     return result;
   }
 
-  // ── Render one photo card ──────────────────────────────────────
-  function renderCard(photo) {
+  // ── Render one card ───────────────────────────────────────────
+  function renderCard(photo, prepend = false) {
     const grid = document.getElementById('galleryGrid');
     const msg  = document.getElementById('galleryMsg');
     if (msg) msg.remove();
@@ -310,47 +285,32 @@
     const thumb = photo.thumb || photo.url;
 
     item.innerHTML = `
-      <img src="${thumb}" alt="Gallery" loading="lazy" style="opacity:1;display:block;"/>
+      <img src="${thumb}" alt="Gallery" loading="lazy"/>
       <div class="gallery-item-overlay">
-        <span onclick="openLightbox('${photo.url}')" style="font-size:10px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;border:1px solid var(--gold);padding:5px 12px;cursor:pointer;background:rgba(0,0,0,0.4);">🔍 View</span>
+        <span style="font-size:10px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;border:1px solid var(--gold);padding:5px 12px;cursor:pointer;background:rgba(0,0,0,0.4);">🔍 View</span>
       </div>
-      <div class="del-btn" title="Delete" onclick="deletePhoto('${photo.id}', this)">🗑</div>`;
+      <div class="del-btn" title="Delete">🗑</div>`;
 
+    item.querySelector('.gallery-item-overlay span').addEventListener('click', () => openLightbox(photo.url));
     item.querySelector('img').addEventListener('click', () => openLightbox(photo.url));
-    // Fade in smoothly
+    item.querySelector('.del-btn').addEventListener('click', () => deletePhoto(photo.id, item));
+
     item.style.opacity = '0';
     item.style.transition = 'opacity 0.4s ease';
-    grid.appendChild(item);
+    if (prepend && grid.firstChild) grid.insertBefore(item, grid.firstChild);
+    else grid.appendChild(item);
     requestAnimationFrame(() => { item.style.opacity = '1'; });
   }
 
-  function deletePhoto(id, btn) {
+  function deletePhoto(id, card) {
     const pw = prompt('Enter admin password to delete:');
     if (pw !== ADMIN_PASS) { alert('Wrong password!'); return; }
     allPhotos = allPhotos.filter(p => p.id !== id);
     saveAllPhotos(allPhotos);
-    const card = btn.closest('.gallery-item');
     card.style.opacity = '0';
     card.style.transform = 'scale(0.8)';
     card.style.transition = 'all 0.3s ease';
     setTimeout(() => { card.remove(); updateCount(); }, 300);
-  }
-
-  // ── Render next PAGE_SIZE photos ──────────────────────────────
-  function renderNextPage() {
-    const batch = allPhotos.slice(displayedN, displayedN + PAGE_SIZE);
-    batch.forEach(p => renderCard(p));
-    displayedN += batch.length;
-    updateCount();
-    // Show/hide load more
-    const loadMoreWrap = document.getElementById('loadMoreWrap');
-    if (displayedN < allPhotos.length) {
-      loadMoreWrap.style.display = 'block';
-      document.getElementById('loadMoreBtn').textContent =
-        `Load More Photos ↓ (${allPhotos.length - displayedN} remaining)`;
-    } else {
-      loadMoreWrap.style.display = 'none';
-    }
   }
 
   function updateCount() {
@@ -358,13 +318,26 @@
     if (el) el.textContent = allPhotos.length + ' photo' + (allPhotos.length !== 1 ? 's' : '');
   }
 
-  // ── Load gallery on page open ──────────────────────────────────
+  function renderNextPage() {
+    const batch = allPhotos.slice(displayedN, displayedN + PAGE_SIZE);
+    batch.forEach(p => renderCard(p));
+    displayedN += batch.length;
+    updateCount();
+    const wrap = document.getElementById('loadMoreWrap');
+    if (displayedN < allPhotos.length) {
+      wrap.style.display = 'block';
+      document.getElementById('loadMoreBtn').textContent = `Load More Photos ↓ (${allPhotos.length - displayedN} remaining)`;
+    } else {
+      wrap.style.display = 'none';
+    }
+  }
+
   function loadGallery() {
     allPhotos  = loadAllPhotos();
     displayedN = 0;
     const msg  = document.getElementById('galleryMsg');
     if (allPhotos.length === 0) {
-      if (msg) msg.innerHTML = '📸 No photos yet.<br/><small style="font-size:12px;opacity:0.6;">Upload photos above, or click 🔄 Recover Photos if you uploaded before.</small>';
+      if (msg) msg.innerHTML = '📸 No photos yet.<br/><small style="font-size:12px;opacity:0.6;">Click 🔒 Admin Upload above to add photos.</small>';
       updateCount();
       return;
     }
@@ -373,78 +346,33 @@
 
   document.getElementById('loadMoreBtn').addEventListener('click', renderNextPage);
 
-  // ── Upload to ImgBB ────────────────────────────────────────────
+  // ── Upload to ImgBB ───────────────────────────────────────────
   async function uploadOneFile(file) {
     const fd = new FormData();
     fd.append('image', file);
     const res  = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
     const json = await res.json();
     if (!json.success) throw new Error(json.error?.message || 'Upload failed');
-    return {
-      id:    json.data.id,
-      url:   json.data.url,
-      thumb: json.data.thumb?.url || json.data.display_url
-    };
+    return { id: json.data.id, url: json.data.url, thumb: json.data.thumb?.url || json.data.display_url };
   }
 
-  // ── Recover: fetch all photos from ImgBB account ──────────────
-  async function recoverFromImgBB() {
-    const btn = document.getElementById('recoverBtn');
-    btn.textContent = '⏳ Recovering...';
-    btn.disabled = true;
-    try {
-      // ImgBB API: get all images for this API key (account)
-      let page = 1, fetched = [], hasMore = true;
-      while (hasMore) {
-        const res  = await fetch(`https://api.imgbb.com/1/account/images?key=${IMGBB_KEY}&page=${page}&perpage=100`);
-        const json = await res.json();
-        if (!json.success || !json.data || json.data.length === 0) { hasMore = false; break; }
-        json.data.forEach(img => {
-          fetched.push({ id: img.id, url: img.url, thumb: img.thumb?.url || img.display_url });
-        });
-        if (json.data.length < 100) hasMore = false;
-        page++;
-      }
-      if (fetched.length === 0) {
-        alert('No photos found in your ImgBB account. They may have been deleted from ImgBB.');
-        btn.textContent = '🔄 Recover Photos';
-        btn.disabled = false;
-        return;
-      }
-      // Merge with existing (avoid duplicates)
-      const existingIds = new Set(allPhotos.map(p => p.id));
-      const newOnes = fetched.filter(p => !existingIds.has(p.id));
-      allPhotos = [...newOnes, ...allPhotos];
-      saveAllPhotos(allPhotos);
-      // Re-render
-      document.getElementById('galleryGrid').innerHTML = '<div id="galleryMsg" style="display:none"></div>';
-      displayedN = 0;
-      renderNextPage();
-      alert(`✅ Recovered ${fetched.length} photos! (${newOnes.length} new)`);
-    } catch(err) {
-      alert('Recovery failed: ' + err.message + '\n\nMake sure you are on GitHub Pages (not local file).');
-    }
-    btn.textContent = '🔄 Recover Photos';
-    btn.disabled = false;
-  }
-
-  // ── Show upload box ────────────────────────────────────────────
-  function showUploadBox() {
-    const pw = prompt('Enter admin password to access upload:');
+  // ── Admin unlock ──────────────────────────────────────────────
+  document.getElementById('unlockBtn').addEventListener('click', () => {
+    const pw = prompt('Enter admin password:');
     if (pw !== ADMIN_PASS) { alert('Wrong password!'); return; }
     document.getElementById('uploadBox').style.display = 'block';
     document.getElementById('unlockRow').style.display = 'none';
     document.getElementById('uploadBox').scrollIntoView({ behavior: 'smooth' });
-  }
+  });
 
-  // ── File input — show selected count ──────────────────────────
+  // ── File selection display ────────────────────────────────────
   document.getElementById('photoInput').addEventListener('change', function() {
     const el = document.getElementById('selectedCount');
     el.textContent = `✅ ${this.files.length} photo${this.files.length !== 1 ? 's' : ''} selected`;
     el.style.display = 'block';
   });
 
-  // Drag and drop
+  // ── Drag and drop ─────────────────────────────────────────────
   const area = document.getElementById('uploadArea');
   area.addEventListener('dragover',  (e) => { e.preventDefault(); area.classList.add('dragover'); });
   area.addEventListener('dragleave', ()  => area.classList.remove('dragover'));
@@ -457,18 +385,16 @@
     el.style.display = 'block';
   });
 
-  // ── Submit upload ──────────────────────────────────────────────
+  // ── Submit upload ─────────────────────────────────────────────
   document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const pass = document.getElementById('uploadPass').value;
-    const msgS = document.getElementById('msgSuccess');
-    const msgE = document.getElementById('msgError');
-    const btn  = document.getElementById('uploadBtn');
-    const progWrap = document.getElementById('progressWrap');
-    const fill = document.getElementById('progressFill');
-    const pLeft  = document.getElementById('progressLeft');
-    const pRight = document.getElementById('progressRight');
+    const pass  = document.getElementById('uploadPass').value;
+    const msgS  = document.getElementById('msgSuccess');
+    const msgE  = document.getElementById('msgError');
+    const btn   = document.getElementById('uploadBtn');
+    const fill  = document.getElementById('progressFill');
+    const pLeft = document.getElementById('progressLeft');
+    const pRight= document.getElementById('progressRight');
 
     msgS.style.display = 'none';
     msgE.style.display = 'none';
@@ -479,7 +405,6 @@
       setTimeout(() => msgE.style.display = 'none', 3000);
       return;
     }
-
     const files = Array.from(document.getElementById('photoInput').files);
     if (!files.length) {
       msgE.textContent = '❌ Please select photos first.';
@@ -489,29 +414,19 @@
 
     btn.disabled = true;
     btn.textContent = 'Uploading...';
-    progWrap.style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
 
     let done = 0, failed = 0;
-    const newPhotos = [];
-
     for (let i = 0; i < files.length; i++) {
       const pct = Math.round((i / files.length) * 100);
       fill.style.width = pct + '%';
-      pLeft.textContent  = `Uploading ${i + 1} of ${files.length} photos — do NOT refresh!`;
+      pLeft.textContent  = `Uploading ${i + 1} of ${files.length} — do NOT refresh!`;
       pRight.textContent = pct + '%';
-
       try {
         const photo = await uploadOneFile(files[i]);
-        newPhotos.push(photo);
-        // Save after EVERY photo — prepend only the one new photo, not the whole newPhotos array
         allPhotos = [photo, ...allPhotos];
         saveAllPhotos(allPhotos);
-        // Render immediately at top of grid
-        renderCard(photo);
-        document.getElementById('galleryGrid').insertBefore(
-          document.getElementById('galleryGrid').lastElementChild,
-          document.getElementById('galleryGrid').firstElementChild
-        );
+        renderCard(photo, true);
         displayedN++;
         updateCount();
         done++;
@@ -524,14 +439,13 @@
     fill.style.width = '100%';
     pLeft.textContent  = `✅ Done! ${done} uploaded${failed ? ', ' + failed + ' failed' : ''}`;
     pRight.textContent = '100%';
-
     btn.disabled = false;
     btn.textContent = 'Upload';
     document.getElementById('uploadForm').reset();
     document.getElementById('selectedCount').style.display = 'none';
 
     if (done > 0) {
-      msgS.textContent = `✅ ${done} photo${done > 1 ? 's' : ''} uploaded and saved forever! ☁️`;
+      msgS.textContent = `✅ ${done} photo${done > 1 ? 's' : ''} uploaded! ☁️ Visible on all devices.`;
       msgS.style.display = 'block';
     }
     if (failed > 0) {
@@ -539,29 +453,13 @@
       msgE.style.display = 'block';
     }
     setTimeout(() => {
-      progWrap.style.display = 'none';
+      document.getElementById('progressWrap').style.display = 'none';
       msgS.style.display = 'none';
       msgE.style.display = 'none';
     }, 8000);
   });
 
-  // ── Deduplicate any already-saved duplicates ──────────────────
-  function deduplicateSaved() {
-    const photos = loadAllPhotos();
-    const seen = new Set();
-    const unique = photos.filter(p => {
-      if (seen.has(p.id)) return false;
-      seen.add(p.id);
-      return true;
-    });
-    if (unique.length !== photos.length) {
-      saveAllPhotos(unique);
-      console.log(`Deduped: removed ${photos.length - unique.length} duplicate(s)`);
-    }
-  }
-
-  // ── Start ──────────────────────────────────────────────────────
-  deduplicateSaved();
+  // ── Start ─────────────────────────────────────────────────────
   loadGallery();
   </script>
 </body>
