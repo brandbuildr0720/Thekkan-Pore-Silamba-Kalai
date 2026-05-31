@@ -190,16 +190,18 @@ document.querySelectorAll('.gallery-item').forEach(item => {
   item.addEventListener('click', () => { const img = item.querySelector('img'); if (img) openLightbox(img.src); });
 });
 
-// ===== MASTER CARD HOVER =====
-document.querySelectorAll('.master-card').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 12;
-    card.style.transform = `translateY(-8px) rotateX(${-y}deg) rotateY(${x}deg)`;
+// ===== MASTER CARD HOVER (desktop only) =====
+if (window.matchMedia('(hover: hover)').matches) {
+  document.querySelectorAll('.master-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 12;
+      card.style.transform = `translateY(-8px) rotateX(${-y}deg) rotateY(${x}deg)`;
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
   });
-  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-});
+}
 
 // ===== ACTIVE NAV LINK =====
 const currentPage = window.location.pathname.split('/').pop();

@@ -980,39 +980,208 @@ body {
   .quick-links { grid-template-columns: repeat(2, 1fr); }
   .footer-top { grid-template-columns: 1fr 1fr; }
 }
+
 @media (max-width: 768px) {
-  .navbar { padding: 14px 20px; }
+  /* --- NAVBAR --- */
+  .navbar { padding: 12px 16px; }
+  .navbar.scrolled { padding: 10px 16px; }
   .nav-links { 
     display: none;
     flex-direction: column;
     position: absolute;
     top: 100%; left: 0; right: 0;
     background: rgba(10,7,5,0.98);
-    padding: 20px;
+    padding: 16px;
     border-bottom: 1px solid var(--border);
-    gap: 4px;
+    gap: 2px;
+    max-height: 80vh;
+    overflow-y: auto;
   }
   .nav-links.open { display: flex; }
-  .nav-toggle { display: block; }
+  .nav-links a {
+    padding: 12px 16px;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+  .nav-links a::after { display: none; }
+  .nav-toggle { display: block; font-size: 24px; padding: 4px; }
+  .logo-tamil { font-size: 12px; letter-spacing: 1px; }
+  .logo-sub { font-size: 8px; letter-spacing: 2px; }
+  .nav-class-logo { width: 32px; height: 32px; }
+
+  /* --- HERO BANNER --- */
+  .hero-banner { 
+    height: 40vw; 
+    min-height: 150px; 
+    max-height: 260px;
+    margin-top: 58px;
+  }
+
+  /* --- PROFILE SECTION --- */
+  .profile-section { 
+    padding: 0 16px 20px; 
+    gap: 14px; 
+    margin-top: -40px;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+  }
+  .profile-logo-wrap { 
+    width: 80px; 
+    height: 80px; 
+    flex-shrink: 0;
+    border-width: 2px;
+  }
+  .profile-info { padding-bottom: 4px; }
+  .profile-name { 
+    font-size: clamp(13px, 4.5vw, 20px);
+    margin-bottom: 4px;
+  }
+  .profile-tagline { 
+    font-size: 9px; 
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .hero-btn {
+    padding: 10px 24px;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  /* --- ABOUT STRIP --- */
+  .about-strip { 
+    gap: 0; 
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  .strip-item { 
+    padding: 18px 20px;
+    width: 50%;
+    border-bottom: 1px solid var(--border);
+  }
+  .strip-item:nth-child(odd) { border-right: 1px solid var(--border); }
+  .strip-num { font-size: 28px; }
+  .strip-label { font-size: 9px; letter-spacing: 2px; }
+  .strip-divider { display: none; }
+
+  /* --- SECTION HEADER --- */
+  .section-header { margin-bottom: 36px; }
+  .section-title { font-size: clamp(20px, 5vw, 32px); }
+  .section-desc { font-size: 13px; padding: 0 8px; }
+
+  /* --- MASTERS SECTION --- */
+  .masters-section { padding: 50px 16px; }
   .masters-grid { grid-template-columns: 1fr; }
-  .quick-links { grid-template-columns: 1fr 1fr; }
-  .footer-top { grid-template-columns: 1fr; padding: 40px 20px; }
-  .about-strip { gap: 0; flex-wrap: wrap; }
-  .strip-item { padding: 20px 30px; }
-  .master-profile { grid-template-columns: 1fr; }
+
+  /* --- QUICK LINKS --- */
+  .quick-links { 
+    grid-template-columns: 1fr 1fr;
+  }
+  .ql-card { 
+    padding: 30px 16px;
+  }
+  .ql-card:nth-child(odd) { border-right: 1px solid var(--border); }
+  .ql-icon { font-size: 26px; margin-bottom: 10px; }
+  .ql-card h3 { font-size: 14px; }
+  .ql-card p { font-size: 11px; }
+
+  /* --- QUOTE BANNER --- */
+  .quote-banner { padding: 50px 20px; }
+  .quote-mark { font-size: 56px; }
+  .quote-text { font-size: clamp(14px, 3.5vw, 18px); }
+
+  /* --- FOOTER --- */
+  .footer-top { 
+    grid-template-columns: 1fr; 
+    padding: 36px 16px;
+    gap: 28px;
+  }
+  .footer-bottom { padding: 16px; }
+  .footer-brand h2 { font-size: 15px; }
+  .insta-link { font-size: 11px; word-break: break-word; }
+
+  /* --- INNER PAGES --- */
+  .section-block { padding: 40px 16px; }
+  .page-hero { 
+    height: 38vw; 
+    min-height: 200px;
+    margin-top: 58px;
+  }
+  .page-hero-content h1 { font-size: clamp(18px, 5.5vw, 36px); }
+
+  /* --- MASTER PROFILE (branch pages) --- */
+  .master-profile { 
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .master-profile-img::after { 
+    bottom: -6px; right: -6px;
+    width: 70%; height: 70%;
+  }
+  .master-profile-info h2 { font-size: 24px; }
+  .info-grid { grid-template-columns: 1fr 1fr; }
+
+  /* --- LOCATIONS --- */
   .locations-grid { grid-template-columns: 1fr; }
-  .info-grid { grid-template-columns: 1fr; }
-  .section-block { padding: 60px 20px; }
-  .masters-section { padding: 60px 20px; }
-  /* Banner & profile responsive */
-  .hero-banner { height: 28vw; min-height: 160px; }
-  .profile-section { padding: 0 20px 24px; gap: 16px; margin-top: -44px; }
-  .profile-logo-wrap { width: 88px; height: 88px; }
-  .profile-name { font-size: clamp(14px, 4vw, 22px); }
+
+  /* --- GALLERY --- */
+  .gallery-grid { 
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  /* --- UPLOAD SECTION --- */
+  .upload-section { padding: 28px 16px; }
+
+  /* --- TIMELINE --- */
+  .timeline-item { gap: 20px; }
+  .timeline-dot { width: 40px; height: 40px; font-size: 11px; }
+  .timeline-content h3 { font-size: 16px; }
+  .timeline-content p { font-size: 13px; }
+
+  /* --- CONTACT PAGE --- */
+  .location-card { padding: 20px 16px; }
+  .location-card h3 { font-size: 15px; }
 }
+
 @media (max-width: 480px) {
+  /* --- PROFILE: stack vertically on very small screens --- */
+  .profile-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: -36px;
+    padding: 0 16px 20px;
+  }
+  .profile-logo-wrap { width: 72px; height: 72px; }
+  .hero-btn { width: 100%; text-align: center; }
+
+  /* --- ABOUT STRIP: all 4 in 2x2 --- */
+  .strip-item { width: 50%; }
+
+  /* --- QUICK LINKS: single column --- */
   .quick-links { grid-template-columns: 1fr; }
-  .ql-card { border-right: none; border-bottom: 1px solid var(--border); }
+  .ql-card { 
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* --- INFO GRID: single column --- */
+  .info-grid { grid-template-columns: 1fr; }
+
+  /* --- FOOTER --- */
+  .footer-top { padding: 28px 14px; }
+
+  /* --- GALLERY: tighter grid --- */
+  .gallery-grid { 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  /* --- SECTION BLOCK --- */
+  .section-block { padding: 32px 14px; }
+
+  /* --- BRANCH NAV BUTTONS --- */
+  .hero-btn { display: block; text-align: center; width: 100%; }
 }
 
 /* ===== SCROLL REVEAL ===== */
@@ -1153,6 +1322,17 @@ body {
     aspect-ratio: 16/7;
   }
 }
+@media (max-width: 768px) {
+  .masters-grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .branch1-double {
+    grid-column: auto;
+  }
+  .double-img-row {
+    aspect-ratio: 4/3;
+  }
+}
 @media (max-width: 600px) {
   .masters-grid-3 {
     grid-template-columns: 1fr;
@@ -1160,4 +1340,46 @@ body {
   .branch1-double {
     grid-column: auto;
   }
+}
+
+/* ===== MOBILE GRAND MASTER CARDS ===== */
+@media (max-width: 480px) {
+  /* Grandmaster circles */
+  [style*="width:180px"][style*="height:180px"] {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  /* Branch nav buttons row */
+  [style*="display:flex"][style*="gap:16px"][style*="justify-content:center"] {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 16px;
+  }
+}
+
+/* ===== TOUCH DEVICE: always show card overlays ===== */
+@media (hover: none) {
+  .card-overlay { opacity: 1 !important; }
+  .gallery-item-overlay { opacity: 1 !important; }
+  .gallery-item-overlay span { padding: 6px 12px; font-size: 10px; }
+  .card-cta { padding: 6px 14px; font-size: 10px; }
+}
+
+/* ===== SAFE AREA (iPhone notch / home bar) ===== */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .site-footer .footer-bottom {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+  .navbar {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+/* ===== PREVENT HORIZONTAL OVERFLOW ===== */
+img { max-width: 100%; }
+.master-profile-info, .card-info, .section-block,
+.upload-form, .location-card, .timeline-content {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
