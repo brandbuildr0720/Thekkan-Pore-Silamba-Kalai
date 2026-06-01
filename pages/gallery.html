@@ -378,7 +378,9 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
   // ══════════════════════════════════════════════
   const IMGBB_KEY  = '680e43bf013aff32c403f0f71c8cdaef';
   const ADMIN_PASS = '1711';
-  const CHUNK      = 20;
+  const SUPA_URL   = 'https://lhxpctebfukngnyuzugq.supabase.co';
+  const SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxoeHBjdGViZnVrbmdueXV6dWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMjkyMzAsImV4cCI6MjA5NTkwNTIzMH0.VitbtuOQ5mq9Zn0_lUE87CAfMkF5fWYIty-RdwCK-_Q';
+  const HEADERS    = { 'Content-Type': 'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
   const PAGE_SIZE  = 30;
 
   let allPhotos  = [];
@@ -396,7 +398,7 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
 
   // ── Scroll reveal ─────────────────────────────
   new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 }).observe(document.querySelector('.scroll-reveal'));
 
   // ── Lightbox ──────────────────────────────────
@@ -406,23 +408,36 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
 
   // ══════════════════════════════════════════════
-  //  STORAGE  (chunked localStorage)
+  //  SUPABASE — Real backend, syncs all devices
   // ══════════════════════════════════════════════
-  function savePhotos(photos) {
-    for (let i = 0; i < 200; i++) localStorage.removeItem('sil_gal_' + i);
-    for (let i = 0; i < photos.length; i += CHUNK) {
-      localStorage.setItem('sil_gal_' + Math.floor(i / CHUNK), JSON.stringify(photos.slice(i, i + CHUNK)));
-    }
-    localStorage.setItem('sil_gal_total', photos.length);
+
+  // INSERT a photo into Supabase
+  async function savePhoto(photo) {
+    const res = await fetch(SUPA_URL + '/rest/v1/photos', {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'return=representation' },
+      body: JSON.stringify({ url: photo.url, thumb: photo.thumb })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Save failed');
+    return data[0]; // returns saved row with real id
   }
-  function loadPhotos() {
-    const total = parseInt(localStorage.getItem('sil_gal_total') || '0');
-    if (!total) return [];
-    const out = [];
-    for (let i = 0; i < Math.ceil(total / CHUNK); i++) {
-      try { out.push(...JSON.parse(localStorage.getItem('sil_gal_' + i) || '[]')); } catch(e) {}
-    }
-    return out;
+
+  // DELETE a photo from Supabase
+  async function deleteFromDB(id) {
+    await fetch(SUPA_URL + '/rest/v1/photos?id=eq.' + id, {
+      method: 'DELETE',
+      headers: HEADERS
+    });
+  }
+
+  // LOAD all photos from Supabase (newest first)
+  async function loadFromDB() {
+    const res  = await fetch(SUPA_URL + '/rest/v1/photos?select=*&order=created_at.desc', {
+      headers: HEADERS
+    });
+    if (!res.ok) throw new Error('Load failed');
+    return await res.json();
   }
 
   // ══════════════════════════════════════════════
@@ -441,9 +456,9 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     item.innerHTML = `
       <img src="${thumb}" alt="Gallery" loading="lazy"/>
       <div class="gallery-item-overlay">
-        <span style="font-size:10px;letter-spacing:1px;color:var(--gold);border:1px solid var(--gold);padding:5px 12px;cursor:pointer;background:rgba(0,0,0,0.5);">🔍 VIEW</span>
+        <span style="font-size:10px;letter-spacing:1px;color:var(--gold);border:1px solid var(--gold);padding:5px 12px;cursor:pointer;background:rgba(0,0,0,0.5);">&#128269; VIEW</span>
       </div>
-      <div class="del-btn" title="Delete">🗑</div>`;
+      <div class="del-btn" title="Delete">&#128465;</div>`;
 
     item.querySelector('.gallery-item-overlay span').addEventListener('click', () => openLightbox(photo.url));
     item.querySelector('img').addEventListener('click', () => openLightbox(photo.url));
@@ -456,12 +471,13 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     requestAnimationFrame(() => { item.style.opacity = '1'; });
   }
 
-  function deletePhoto(id, card) {
+  async function deletePhoto(id, card) {
     if (prompt('Admin password to delete:') !== ADMIN_PASS) { alert('Wrong password!'); return; }
-    allPhotos = allPhotos.filter(p => p.id !== id);
-    savePhotos(allPhotos);
     card.style.cssText += 'opacity:0;transform:scale(0.8);transition:all 0.3s ease';
-    setTimeout(() => { card.remove(); updateCount(); }, 300);
+    setTimeout(() => { card.remove(); }, 300);
+    allPhotos = allPhotos.filter(p => p.id !== id);
+    updateCount();
+    try { await deleteFromDB(id); } catch(e) { console.error('Delete failed:', e); }
   }
 
   function updateCount() {
@@ -477,20 +493,25 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     const wrap = document.getElementById('loadMoreWrap');
     const rem  = allPhotos.length - displayedN;
     wrap.style.display = rem > 0 ? 'block' : 'none';
-    if (rem > 0) document.getElementById('loadMoreBtn').textContent = `Load More Photos ↓ (${rem} remaining)`;
+    if (rem > 0) document.getElementById('loadMoreBtn').textContent = `Load More Photos (${rem} remaining)`;
   }
 
-  function loadGallery() {
-    allPhotos  = loadPhotos();
-    displayedN = 0;
+  async function loadGallery() {
     const grid = document.getElementById('galleryGrid');
-    grid.innerHTML = '';
-    if (allPhotos.length === 0) {
-      grid.innerHTML = '<div id="galleryMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;">📸 No photos yet. Click 🔒 Admin Upload to add photos.</div>';
-      updateCount();
-      return;
+    grid.innerHTML = '<div id="galleryMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;">&#9203; Loading gallery...</div>';
+    try {
+      allPhotos  = await loadFromDB();
+      displayedN = 0;
+      grid.innerHTML = '';
+      if (allPhotos.length === 0) {
+        grid.innerHTML = '<div id="galleryMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;">&#128248; No photos yet. Click &#128274; Admin Upload to add photos.</div>';
+        updateCount(); return;
+      }
+      renderNextPage();
+    } catch(err) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#e74c3c;font-size:13px;">&#10060; Could not load gallery. Check internet connection.</div>';
+      console.error(err);
     }
-    renderNextPage();
   }
 
   document.getElementById('loadMoreBtn').addEventListener('click', renderNextPage);
@@ -516,11 +537,11 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
   });
 
   // ══════════════════════════════════════════════
-  //  TAB 1 — DIRECT UPLOAD TO IMGBB
+  //  TAB 1 — UPLOAD DIRECTLY TO IMGBB + SUPABASE
   // ══════════════════════════════════════════════
   document.getElementById('photoInput').addEventListener('change', function() {
     const el = document.getElementById('selectedCount');
-    el.textContent = `✅ ${this.files.length} photo${this.files.length !== 1 ? 's' : ''} selected`;
+    el.textContent = `${this.files.length} photo${this.files.length !== 1 ? 's' : ''} selected`;
     el.style.display = 'block';
   });
 
@@ -531,40 +552,36 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     e.preventDefault(); area.classList.remove('dragover');
     document.getElementById('photoInput').files = e.dataTransfer.files;
     const el = document.getElementById('selectedCount');
-    el.textContent = `✅ ${e.dataTransfer.files.length} photo(s) selected`;
+    el.textContent = `${e.dataTransfer.files.length} photo(s) selected`;
     el.style.display = 'block';
   });
 
-  async function uploadOneFile(file) {
+  async function uploadToImgBB(file) {
     const fd = new FormData();
     fd.append('image', file);
     const res  = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method:'POST', body:fd });
     const json = await res.json();
-    if (!json.success) throw new Error(json.error?.message || 'Upload failed');
-    return {
-      id:    json.data.id,
-      url:   json.data.url,
-      thumb: json.data.thumb?.url || json.data.display_url
-    };
+    if (!json.success) throw new Error(json.error?.message || 'ImgBB upload failed');
+    return { url: json.data.url, thumb: json.data.thumb?.url || json.data.display_url };
   }
 
   document.getElementById('uploadBtn').addEventListener('click', async () => {
-    const pass  = document.getElementById('uploadPass').value;
-    const msgS  = document.getElementById('msgSuccess');
-    const msgE  = document.getElementById('msgError');
-    const btn   = document.getElementById('uploadBtn');
-    const fill  = document.getElementById('progressFill');
-    const pL    = document.getElementById('progressLeft');
-    const pR    = document.getElementById('progressRight');
+    const pass = document.getElementById('uploadPass').value;
+    const msgS = document.getElementById('msgSuccess');
+    const msgE = document.getElementById('msgError');
+    const btn  = document.getElementById('uploadBtn');
+    const fill = document.getElementById('progressFill');
+    const pL   = document.getElementById('progressLeft');
+    const pR   = document.getElementById('progressRight');
     msgS.style.display = msgE.style.display = 'none';
 
     if (pass !== ADMIN_PASS) {
-      msgE.textContent = '❌ Wrong password.'; msgE.style.display = 'block';
+      msgE.textContent = 'Wrong password.'; msgE.style.display = 'block';
       setTimeout(() => msgE.style.display = 'none', 3000); return;
     }
     const files = Array.from(document.getElementById('photoInput').files);
     if (!files.length) {
-      msgE.textContent = '❌ Please select photos first.'; msgE.style.display = 'block'; return;
+      msgE.textContent = 'Please select photos first.'; msgE.style.display = 'block'; return;
     }
 
     btn.disabled = true; btn.textContent = 'Uploading...';
@@ -574,27 +591,32 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     for (let i = 0; i < files.length; i++) {
       const pct = Math.round((i / files.length) * 100);
       fill.style.width = pct + '%';
-      pL.textContent = `Uploading ${i+1} of ${files.length} — do NOT refresh!`;
+      pL.textContent = `Uploading ${i+1} of ${files.length}`;
       pR.textContent = pct + '%';
       try {
-        const photo = await uploadOneFile(files[i]);
-        allPhotos = [photo, ...allPhotos];
-        savePhotos(allPhotos);
-        renderCard(photo, true);
+        // Step 1: Upload image to ImgBB
+        const imgData = await uploadToImgBB(files[i]);
+        // Step 2: Save URL to Supabase (real backend)
+        const saved = await savePhoto(imgData);
+        allPhotos = [saved, ...allPhotos];
+        renderCard(saved, true);
         displayedN++; updateCount(); done++;
-      } catch(err) { console.error(files[i].name, err.message); failed++; }
+      } catch(err) {
+        console.error(files[i].name, err.message);
+        failed++;
+      }
     }
 
     fill.style.width = '100%';
-    pL.textContent = `✅ Done! ${done} uploaded${failed ? ', '+failed+' failed':''}`;
+    pL.textContent = `Done! ${done} uploaded${failed ? ', '+failed+' failed':''}`;
     pR.textContent = '100%';
     btn.disabled = false; btn.textContent = 'Upload';
     document.getElementById('photoInput').value = '';
     document.getElementById('selectedCount').style.display = 'none';
     document.getElementById('uploadPass').value = '';
 
-    if (done)   { msgS.textContent = `✅ ${done} photo${done>1?'s':''} added! Visible on all devices ☁️`; msgS.style.display='block'; }
-    if (failed) { msgE.textContent = `⚠️ ${failed} failed. Try again.`; msgE.style.display='block'; }
+    if (done)   { msgS.textContent = `${done} photo${done>1?'s':''} uploaded! Visible on ALL devices instantly.`; msgS.style.display='block'; }
+    if (failed) { msgE.textContent = `${failed} photo(s) failed. Check internet and try again.`; msgE.style.display='block'; }
     setTimeout(() => {
       document.getElementById('progressWrap').style.display = 'none';
       msgS.style.display = msgE.style.display = 'none';
@@ -604,24 +626,13 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
   // ══════════════════════════════════════════════
   //  TAB 2 — PASTE IMGBB HTML
   // ══════════════════════════════════════════════
-
-  // Extract all image URLs from pasted HTML or plain URLs
   function extractUrls(raw) {
     const urls = new Set();
-    // Match src="..." or src='...' from img tags
     const srcMatches = raw.matchAll(/src=["']([^"']+i\.ibb\.co[^"']+)["']/gi);
     for (const m of srcMatches) urls.add(m[1].trim());
-    // Match href="https://ibb.co/..." (direct page links — skip, we need img URLs)
-    // Match plain https://i.ibb.co/... URLs
     const plainMatches = raw.matchAll(/https?:\/\/i\.ibb\.co\/[^\s"'<>]+/gi);
     for (const m of plainMatches) urls.add(m[0].trim());
     return [...urls];
-  }
-
-  function makePhotoFromUrl(url) {
-    // Generate a stable id from the URL
-    const id = 'paste_' + url.split('/').slice(-2).join('_').replace(/[^a-z0-9_]/gi,'');
-    return { id, url, thumb: url };
   }
 
   document.getElementById('previewBtn').addEventListener('click', () => {
@@ -631,49 +642,53 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     const grid = document.getElementById('previewGrid');
     const err  = document.getElementById('pasteError');
     err.style.display = 'none';
-
     if (!urls.length) {
-      err.textContent = '❌ No ImgBB image URLs found. Make sure you paste the HTML embed code or direct i.ibb.co links.';
+      err.textContent = 'No ImgBB image URLs found. Paste the HTML embed code or direct i.ibb.co links.';
       err.style.display = 'block'; prev.style.display = 'none'; return;
     }
     grid.innerHTML = urls.map(u => `<img src="${u}" loading="lazy" onerror="this.style.opacity=0.3"/>`).join('');
     prev.style.display = 'block';
-    document.getElementById('pasteSuccess').textContent = `Found ${urls.length} image${urls.length>1?'s':''} — click "Add to Gallery" to save.`;
+    document.getElementById('pasteSuccess').textContent = `Found ${urls.length} image${urls.length>1?'s':''} — click Add to Gallery to save.`;
     document.getElementById('pasteSuccess').style.display = 'block';
   });
 
-  document.getElementById('addPasteBtn').addEventListener('click', () => {
-    const raw    = document.getElementById('pasteBox').value.trim();
-    const urls   = extractUrls(raw);
-    const msgS   = document.getElementById('pasteSuccess');
-    const msgE   = document.getElementById('pasteError');
+  document.getElementById('addPasteBtn').addEventListener('click', async () => {
+    const raw  = document.getElementById('pasteBox').value.trim();
+    const urls = extractUrls(raw);
+    const msgS = document.getElementById('pasteSuccess');
+    const msgE = document.getElementById('pasteError');
     msgS.style.display = msgE.style.display = 'none';
 
     if (!urls.length) {
-      msgE.textContent = '❌ No valid ImgBB URLs found in pasted code.';
-      msgE.style.display = 'block'; return;
+      msgE.textContent = 'No valid ImgBB URLs found.'; msgE.style.display = 'block'; return;
     }
 
-    // Avoid duplicates
     const existingUrls = new Set(allPhotos.map(p => p.url));
-    const newPhotos = urls.filter(u => !existingUrls.has(u)).map(makePhotoFromUrl);
+    const newUrls = urls.filter(u => !existingUrls.has(u));
 
-    if (!newPhotos.length) {
-      msgE.textContent = '⚠️ All these photos are already in the gallery.';
-      msgE.style.display = 'block'; return;
+    if (!newUrls.length) {
+      msgE.textContent = 'All these photos are already in the gallery.'; msgE.style.display = 'block'; return;
     }
 
-    // Prepend new photos
-    allPhotos = [...newPhotos, ...allPhotos];
-    savePhotos(allPhotos);
-    newPhotos.forEach(p => { renderCard(p, true); displayedN++; });
-    updateCount();
+    const btn = document.getElementById('addPasteBtn');
+    btn.disabled = true; btn.textContent = 'Saving...';
 
-    msgS.textContent = `✅ ${newPhotos.length} photo${newPhotos.length>1?'s':''} added to gallery! Visible on this device.`;
+    let saved = 0;
+    for (const url of newUrls) {
+      try {
+        const photo = await savePhoto({ url, thumb: url });
+        allPhotos = [photo, ...allPhotos];
+        renderCard(photo, true);
+        displayedN++; updateCount(); saved++;
+      } catch(e) { console.error('Paste save failed:', e); }
+    }
+
+    btn.disabled = false; btn.textContent = 'Add to Gallery';
+    msgS.textContent = `${saved} photo${saved>1?'s':''} added! Visible on all devices.`;
     msgS.style.display = 'block';
     document.getElementById('pasteBox').value = '';
     document.getElementById('pastePreview').style.display = 'none';
-    setTimeout(() => msgS.style.display = 'none', 6000);
+    setTimeout(() => msgS.style.display = 'none', 5000);
   });
 
   document.getElementById('clearPasteBtn').addEventListener('click', () => {
@@ -684,15 +699,14 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
   });
 
   // ══════════════════════════════════════════════
-  //  SYNC / RECOVER BUTTON
+  //  SYNC BUTTON — fresh load from Supabase
   // ══════════════════════════════════════════════
   document.getElementById('recoverBtn').addEventListener('click', async () => {
     const btn = document.getElementById('recoverBtn');
-    btn.textContent = '⏳ Syncing...'; btn.disabled = true;
-    // Re-load from localStorage (in case another tab updated it)
-    loadGallery();
-    btn.textContent = '✅ Synced!';
-    setTimeout(() => { btn.textContent = '🔄 Sync Photos'; btn.disabled = false; }, 2000);
+    btn.textContent = 'Syncing...'; btn.disabled = true;
+    await loadGallery();
+    btn.textContent = 'Synced!';
+    setTimeout(() => { btn.textContent = 'Sync Photos'; btn.disabled = false; }, 2000);
   });
 
   // ── Start ─────────────────────────────────────
