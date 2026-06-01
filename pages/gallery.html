@@ -431,13 +431,40 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     });
   }
 
-  // LOAD all photos from Supabase (newest first)
+  // LOAD all photos — show cache instantly, refresh in background
   async function loadFromDB() {
-    const res  = await fetch(SUPA_URL + '/rest/v1/photos?select=*&order=created_at.desc', {
+    const CACHE_KEY  = 'sil_photos_v2';
+    const CACHE_TIME = 'sil_photos_time';
+    const cached     = localStorage.getItem(CACHE_KEY);
+    const cacheAge   = Date.now() - parseInt(localStorage.getItem(CACHE_TIME) || '0');
+
+    // Show cached photos INSTANTLY (under 10 min old)
+    if (cached && cacheAge < 600000) {
+      const photos = JSON.parse(cached);
+      // Refresh from Supabase silently in background
+      fetchAndUpdateCache(CACHE_KEY, CACHE_TIME).then(fresh => {
+        if (fresh && fresh.length !== photos.length) {
+          // New photos found — reload gallery silently
+          allPhotos = fresh; displayedN = 0;
+          document.getElementById('galleryGrid').innerHTML = '';
+          renderNextPage();
+        }
+      });
+      return photos;
+    }
+    // No cache — fetch from Supabase
+    return await fetchAndUpdateCache(CACHE_KEY, CACHE_TIME);
+  }
+
+  async function fetchAndUpdateCache(CACHE_KEY, CACHE_TIME) {
+    const res = await fetch(SUPA_URL + '/rest/v1/photos?select=id,url,thumb&order=created_at.desc', {
       headers: HEADERS
     });
     if (!res.ok) throw new Error('Load failed');
-    return await res.json();
+    const photos = await res.json();
+    localStorage.setItem(CACHE_KEY, JSON.stringify(photos));
+    localStorage.setItem(CACHE_TIME, Date.now());
+    return photos;
   }
 
   // ══════════════════════════════════════════════
@@ -451,17 +478,24 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     const item = document.createElement('div');
     item.className = 'gallery-item';
     item.dataset.id = photo.id;
+
+    // Use thumbnail (small) for grid, full URL only when opening lightbox
     const thumb = photo.thumb || photo.url;
+    const full  = photo.url;
 
     item.innerHTML = `
-      <img src="${thumb}" alt="Gallery" loading="lazy"/>
+      <img data-src="${thumb}" alt="Gallery" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3C/svg%3E" style="background:#1a1714;"/>
       <div class="gallery-item-overlay">
         <span style="font-size:10px;letter-spacing:1px;color:var(--gold);border:1px solid var(--gold);padding:5px 12px;cursor:pointer;background:rgba(0,0,0,0.5);">&#128269; VIEW</span>
       </div>
       <div class="del-btn" title="Delete">&#128465;</div>`;
 
-    item.querySelector('.gallery-item-overlay span').addEventListener('click', () => openLightbox(photo.url));
-    item.querySelector('img').addEventListener('click', () => openLightbox(photo.url));
+    // Lazy load with IntersectionObserver
+    const img = item.querySelector('img');
+    lazyObserver.observe(img);
+
+    item.querySelector('.gallery-item-overlay span').addEventListener('click', () => openLightbox(full));
+    img.addEventListener('click', () => openLightbox(full));
     item.querySelector('.del-btn').addEventListener('click', () => deletePhoto(photo.id, item));
 
     item.style.opacity = '0';
@@ -470,6 +504,20 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     else grid.appendChild(item);
     requestAnimationFrame(() => { item.style.opacity = '1'; });
   }
+
+  // Lazy load observer — only loads image when it enters viewport
+  const lazyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          lazyObserver.unobserve(img);
+        }
+      }
+    });
+  }, { rootMargin: '200px' }); // preload 200px before visible
 
   async function deletePhoto(id, card) {
     if (prompt('Admin password to delete:') !== ADMIN_PASS) { alert('Wrong password!'); return; }
@@ -599,6 +647,8 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
         // Step 2: Save URL to Supabase (real backend)
         const saved = await savePhoto(imgData);
         allPhotos = [saved, ...allPhotos];
+        // Bust cache so other devices get fresh photos
+        localStorage.removeItem('sil_photos_time');
         renderCard(saved, true);
         displayedN++; updateCount(); done++;
       } catch(err) {
