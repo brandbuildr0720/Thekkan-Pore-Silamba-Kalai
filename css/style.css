@@ -1401,3 +1401,80 @@ img { max-width: 100%; }
     order: 2;
   }
 }
+
+/* ===== STUDENT BRANCH CARDS (silver theme) ===== */
+.student-card {
+  background: var(--dark3);
+  border: 1px solid #3a3a3a;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.student-card:hover {
+  transform: translateY(-8px);
+  border-color: #aaaaaa;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(180,180,180,0.1);
+}
+.student-card .card-glow {
+  background: linear-gradient(135deg, transparent 30%, rgba(180,180,180,0.06) 100%);
+}
+.student-card:hover .card-glow { opacity: 1; }
+.student-card:hover .card-img-wrap img {
+  transform: scale(1.06);
+  filter: grayscale(0%);
+}
+.student-card:hover .card-overlay { opacity: 1; }
+.student-card .card-cta {
+  color: #b0b0b0;
+  border-color: #b0b0b0;
+}
+.student-card .card-branch { color: #aaaaaa; }
+.student-card .card-border-line {
+  background: linear-gradient(90deg, #888, transparent);
+}
+.student-card .trained-under {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #777;
+  margin-bottom: 6px;
+  font-family: 'Raleway', sans-serif;
+}
+.student-card .trained-under span {
+  color: #999;
+}
+
+/* student branches section label */
+.student-section-label {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #888;
+  border: 1px solid #333;
+  padding: 4px 14px;
+  margin-bottom: 8px;
+  font-family: 'Raleway', sans-serif;
+}
+
+/* contact page — student branch card silver variant */
+.location-card.student-branch {
+  border-color: #2e2e2e;
+}
+.location-card.student-branch:hover {
+  border-color: #888;
+  box-shadow: 0 8px 30px rgba(150,150,150,0.06);
+}
+.location-card.student-branch h3 { color: #ccc; }
+.location-card.student-branch .view-branch-link {
+  color: #999 !important;
+  border-color: #333 !important;
+}
+.location-card.student-branch .trained-tag {
+  font-size: 11px;
+  color: #666;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
+}

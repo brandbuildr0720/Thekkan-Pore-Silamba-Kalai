@@ -7,196 +7,82 @@
   <link rel="stylesheet" href="../css/style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
-    /* ── Admin Panel ── */
-    .admin-panel {
-      background: var(--dark2);
-      border: 1px solid var(--border);
-      padding: 28px;
+    .gallery-filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-bottom: 40px;
-      display: none;
     }
-    .admin-panel.open { display: block; }
-    .admin-tabs {
-      display: flex; gap: 0;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-    .admin-tab {
-      padding: 10px 24px;
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    .filter-btn {
+      padding: 8px 22px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       font-family: 'Raleway', sans-serif;
-      cursor: pointer; border: none; background: none;
-      color: var(--text-muted);
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      transition: all 0.2s;
-    }
-    .admin-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; }
-
-    /* ── Upload tab ── */
-    .upload-area {
-      border: 2px dashed var(--border);
-      padding: 36px 20px;
-      text-align: center;
+      font-weight: 600;
       cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
       transition: var(--transition);
-      margin-bottom: 16px;
-      position: relative;
     }
-    .upload-area:hover, .upload-area.dragover {
+    .filter-btn:hover, .filter-btn.active {
       border-color: var(--gold);
-      background: rgba(201,168,76,0.05);
-    }
-    .upload-area input[type="file"] {
-      position: absolute; inset: 0; opacity: 0;
-      cursor: pointer; width: 100%; height: 100%;
-    }
-    .upload-area-icon { font-size: 32px; margin-bottom: 8px; }
-    .upload-area-text { font-size: 13px; color: var(--text-muted); }
-    .upload-area-text strong { color: var(--text); }
-    .selected-count { font-size: 12px; color: var(--gold); margin-top: 6px; display: none; }
-    .pass-row { display: flex; gap: 12px; max-width: 500px; margin: 0 auto; }
-    .pass-row input { flex: 1; }
-    .progress-wrap { display: none; max-width: 500px; margin: 14px auto 0; }
-    .progress-track {
-      height: 8px; background: var(--dark3);
-      border: 1px solid var(--border); border-radius: 4px;
-      overflow: hidden; margin-bottom: 8px;
-    }
-    .progress-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
-      border-radius: 4px; transition: width 0.25s ease;
-    }
-    .progress-status { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
-    .progress-status span { color: var(--gold); }
-
-    /* ── Paste HTML tab ── */
-    .paste-info {
-      background: rgba(201,168,76,0.06);
-      border: 1px solid rgba(201,168,76,0.2);
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-    .paste-info strong { color: var(--gold); }
-    .paste-box {
-      width: 100%;
-      min-height: 120px;
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      padding: 14px;
-      resize: vertical;
-      box-sizing: border-box;
-      margin-bottom: 14px;
-      transition: border-color 0.2s;
-    }
-    .paste-box:focus { outline: none; border-color: var(--gold); }
-    .paste-box::placeholder { color: var(--text-muted); opacity: 0.6; }
-    .paste-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn-gold {
-      padding: 10px 28px;
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      font-family: 'Raleway', sans-serif;
-      background: transparent;
-      border: 1px solid var(--gold);
       color: var(--gold);
-      cursor: pointer;
-      transition: var(--transition);
+      background: rgba(201,168,76,0.06);
     }
-    .btn-gold:hover { background: var(--gold); color: var(--dark); }
-    .btn-muted {
-      padding: 10px 20px;
-      font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-      font-family: 'Raleway', sans-serif;
-      background: transparent;
-      border: 1px solid var(--border);
+    .gallery-item.hidden { display: none; }
+
+    /* loader */
+    .gallery-loader {
+      text-align: center;
+      padding: 80px 0;
       color: var(--text-muted);
-      cursor: pointer;
-      transition: var(--transition);
     }
-    .btn-muted:hover { border-color: var(--gold); color: var(--gold); }
-    .paste-preview {
+    .gallery-loader .spinner {
+      width: 36px; height: 36px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* load more */
+    .load-more-wrap {
+      text-align: center;
+      margin-top: 40px;
       display: none;
-      margin-top: 16px;
-      padding: 14px;
-      border: 1px dashed var(--border);
-      background: var(--dark3);
     }
-    .paste-preview-title {
-      font-size: 10px; letter-spacing: 2px; color: var(--gold);
-      text-transform: uppercase; margin-bottom: 10px;
-    }
-    .paste-preview-grid {
-      display: flex; gap: 10px; flex-wrap: wrap;
-    }
-    .paste-preview-grid img {
-      width: 80px; height: 80px; object-fit: cover;
+    .load-more-btn {
+      padding: 12px 36px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
       border: 1px solid var(--border);
-    }
-
-    /* ── Gallery controls ── */
-    .gallery-controls {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
-    }
-    .photo-count-tag {
-      font-size: 12px; color: var(--gold);
-      border: 1px solid var(--border);
-      padding: 6px 16px; background: var(--dark3);
-    }
-    .recover-btn {
-      font-size: 11px; letter-spacing: 1px;
-      color: var(--text-muted); border: 1px solid var(--border);
-      padding: 6px 16px; cursor: pointer;
-      background: var(--dark3); font-family: 'Raleway', sans-serif;
+      background: transparent;
+      color: var(--gold);
+      border-color: var(--gold);
       transition: var(--transition);
     }
-    .recover-btn:hover { border-color: var(--gold); color: var(--gold); }
-
-    /* ── Gallery item ── */
-    .gallery-item { position: relative; }
-    .gallery-item .del-btn {
-      position: absolute; top: 8px; right: 8px;
-      background: rgba(139,26,26,0.9);
-      border: 1px solid #c0392b;
-      color: white; font-size: 13px;
-      width: 28px; height: 28px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; opacity: 0; transition: opacity 0.2s;
-      z-index: 3; border-radius: 2px;
+    .load-more-btn:hover {
+      background: rgba(201,168,76,0.08);
     }
-    .gallery-item:hover .del-btn,
-    .gallery-item:active .del-btn { opacity: 1; }
-
-    /* ── Unlock button ── */
-    #unlockRow { text-align: center; margin-bottom: 32px; }
-
-    /* ── Messages ── */
-    .msg-success { color: #4caf50; font-size: 13px; font-family: 'Raleway', sans-serif; }
-    .msg-error   { color: #e74c3c; font-size: 13px; font-family: 'Raleway', sans-serif; }
-
-    @media (max-width: 480px) {
-      .pass-row { flex-direction: column; }
-      .gallery-controls { flex-direction: column; align-items: flex-start; }
-      .admin-tab { padding: 10px 14px; font-size: 10px; letter-spacing: 1px; }
-      .paste-actions { flex-direction: column; }
-      .btn-gold, .btn-muted { width: 100%; text-align: center; }
+    .load-more-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
   <nav class="navbar" id="navbar">
     <div class="nav-logo">
-      <img src="../images/class-logo.png" alt="Logo" class="nav-class-logo" onerror="this.style.display='none'"/>
+      <img src="../images/class-logo.png" alt="Silambam Class Logo" class="nav-class-logo" onerror="this.style.display='none'"/>
       <div class="nav-logo-text">
         <span class="logo-tamil">THEKKAN PORE</span>
         <span class="logo-sub">SILAMBA KALAI</span>
@@ -215,125 +101,38 @@
 
   <div class="page-hero">
     <div class="page-hero-content">
-      <p class="section-pre">Moments of Power &amp; Grace</p>
-      <h1>Our <span>Gallery</span></h1>
+      <p class="section-pre">Moments of Mastery</p>
+      <h1>The <span>Gallery</span></h1>
     </div>
   </div>
 
   <div class="section-block">
 
-    <!-- UNLOCK BUTTON -->
-    <div id="unlockRow">
-      <button class="recover-btn" id="unlockBtn" style="font-size:12px;padding:12px 28px;">
-        🔒 Admin Upload
-      </button>
-    </div>
-
-    <!-- ADMIN PANEL (hidden until unlocked) -->
-    <div class="admin-panel" id="adminPanel">
-      <div class="admin-tabs">
-        <button class="admin-tab active" data-tab="tab-upload">📸 Upload Photos</button>
-        <button class="admin-tab" data-tab="tab-paste">🔗 Paste ImgBB HTML</button>
-      </div>
-
-      <!-- TAB 1: UPLOAD DIRECTLY -->
-      <div class="tab-pane active" id="tab-upload">
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px;">
-          Select photos from your device — uploaded directly to ImgBB ☁️ and shown on every device
-        </p>
-        <div class="upload-area" id="uploadArea">
-          <input type="file" id="photoInput" accept="image/*" multiple/>
-          <div class="upload-area-icon">📸</div>
-          <div class="upload-area-text">
-            <strong>Tap to choose photos</strong><br/>
-            or drag and drop here
-            <div id="selectedCount" class="selected-count"></div>
-          </div>
-        </div>
-        <div class="pass-row">
-          <input type="password" id="uploadPass" class="upload-input" placeholder="🔒 Admin Password" autocomplete="off"/>
-          <button class="upload-btn" id="uploadBtn">Upload</button>
-        </div>
-        <p class="msg-success" id="msgSuccess" style="display:none;margin-top:12px;text-align:center;"></p>
-        <p class="msg-error"   id="msgError"   style="display:none;margin-top:12px;text-align:center;"></p>
-        <div class="progress-wrap" id="progressWrap">
-          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-          <div class="progress-status">
-            <span id="progressLeft">Uploading...</span>
-            <span id="progressRight">0%</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB 2: PASTE IMGBB HTML -->
-      <div class="tab-pane" id="tab-paste">
-        <div class="paste-info">
-          <strong>How to use:</strong><br/>
-          1. Go to <strong>imgbb.com</strong> → upload your photos<br/>
-          2. After upload, click <strong>"Embed codes"</strong> on any photo<br/>
-          3. Copy the <strong>HTML embed code</strong> (looks like <code>&lt;a href="..."&gt;&lt;img src="..."&gt;&lt;/a&gt;</code>)<br/>
-          4. Paste all codes below — one per line or multiple — then click <strong>Add to Gallery</strong>
-        </div>
-        <textarea
-          id="pasteBox"
-          class="paste-box"
-          placeholder="Paste ImgBB HTML embed codes here...
-
-Example:
-<a href='https://ibb.co/abc'><img src='https://i.ibb.co/abc/photo.jpg' alt='photo'/></a>
-<a href='https://ibb.co/xyz'><img src='https://i.ibb.co/xyz/photo2.jpg' alt='photo2'/></a>
-
-Or just paste direct image URLs:
-https://i.ibb.co/abc123/photo.jpg
-https://i.ibb.co/xyz456/photo2.jpg"></textarea>
-
-        <div id="pastePreview" class="paste-preview">
-          <div class="paste-preview-title">Preview — photos found:</div>
-          <div class="paste-preview-grid" id="previewGrid"></div>
-        </div>
-
-        <div class="paste-actions">
-          <button class="btn-muted" id="previewBtn">🔍 Preview</button>
-          <button class="btn-gold"  id="addPasteBtn">✅ Add to Gallery</button>
-          <button class="btn-muted" id="clearPasteBtn">🗑 Clear</button>
-        </div>
-        <p class="msg-success" id="pasteSuccess" style="display:none;margin-top:12px;"></p>
-        <p class="msg-error"   id="pasteError"   style="display:none;margin-top:12px;"></p>
-      </div>
+    <!-- FILTER TABS -->
+    <div class="gallery-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="training">Training</button>
+      <button class="filter-btn" data-filter="tournament">Tournament</button>
+      <button class="filter-btn" data-filter="event">Events</button>
     </div>
 
     <!-- GALLERY GRID -->
-    <div class="scroll-reveal">
-      <div class="gallery-controls">
-        <div>
-          <p class="section-pre" style="margin-bottom:4px;">All Photos</p>
-          <h2 class="section-title" style="font-size:28px;margin-bottom:0;">Tournament &amp; Training Gallery</h2>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <span class="photo-count-tag" id="photoCountTag">Loading...</span>
-          <button class="recover-btn" id="recoverBtn">🔄 Sync Photos</button>
-        </div>
-      </div>
-
-      <div class="gallery-grid" id="galleryGrid">
-        <div id="galleryMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;">
-          ⏳ Loading gallery...
-        </div>
-      </div>
-
-      <div id="loadMoreWrap" style="text-align:center;margin-top:30px;display:none;">
-        <button class="recover-btn" id="loadMoreBtn" style="padding:12px 32px;">
-          Load More Photos ↓
-        </button>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-loader" id="galleryLoader" style="grid-column:1/-1;">
+        <div class="spinner"></div>
+        <p>Loading gallery...</p>
       </div>
     </div>
 
-  </div>
+    <p id="galleryEmpty" style="display:none;color:var(--text-muted);font-size:13px;text-align:center;padding:60px 0;opacity:0.6;">
+      No photos yet. Post images to the Telegram channel to add them here.
+    </p>
 
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <span class="lightbox-close" id="lightboxClose">✕</span>
-    <img id="lbImg" src="" alt=""/>
+    <!-- LOAD MORE -->
+    <div class="load-more-wrap" id="loadMoreWrap">
+      <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">Load More</button>
+    </div>
+
   </div>
 
   <footer class="site-footer">
@@ -349,22 +148,18 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
           <li><a href="origin.html">Origin</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="training.html">Training</a></li>
-          <li><a href="media.html">Media &amp; Downloads</a></li>
+          <li><a href="media.html">Media & Downloads</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="footer-branches">
         <h4>Branches</h4>
-        <ul>
-          <li><a href="branch1.html">Otteri Extn Branch</a></li>
-          <li><a href="branch2.html">karasangal</a></li>
-          <li><a href="branch3.html">vanchuvanchery</a></li>
-        </ul>
+        <ul id="footerBranchList"></ul>
       </div>
       <div class="footer-downloads">
         <h4>Downloads</h4>
         <a href="../pdfs/entry-form.pdf" class="pdf-btn" download>📄 Entry Form</a>
-        <a href="../pdfs/rules.pdf" class="pdf-btn" download>📄 Rules &amp; Regulations</a>
+        <a href="../pdfs/rules.pdf" class="pdf-btn" download>📄 Rules & Regulations</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -372,395 +167,157 @@ https://i.ibb.co/xyz456/photo2.jpg"></textarea>
     </div>
   </footer>
 
+  <script src="../js/branches.js"></script>
+  <script src="../js/main.js"></script>
   <script>
-  // ══════════════════════════════════════════════
-  //  CONFIG
-  // ══════════════════════════════════════════════
-  const IMGBB_KEY  = '680e43bf013aff32c403f0f71c8cdaef';
-  const ADMIN_PASS = '1711';
-  const SUPA_URL = 'https://lhxpctebfukngnyuzugq.supabase.co';
-const SUPA_KEY = 'sb_publishable_xRnQIRRN4sm5mP8ZKezjqA_Yj1X6Nby';
-  const HEADERS    = { 'Content-Type': 'application/json', 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
-  const PAGE_SIZE  = 30;
+    buildFooterBranches('');
 
-  let allPhotos  = [];
-  let displayedN = 0;
+    // ── Telegram config ──────────────────────────────────
+    const BOT_TOKEN   = '8539224125:AAHKDZGgnbp9e2ls-Pbd-mNPmEaM3Bfjm_A';
+    const CHANNEL     = '@tpsk_gallery';
+    const BATCH_SIZE  = 20; // photos per load
 
-  // ── Navbar ────────────────────────────────────
-  const navbar    = document.getElementById('navbar');
-  const navToggle = document.getElementById('navToggle');
-  const navLinks  = document.getElementById('navLinks');
-  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
-  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-  document.addEventListener('click', (e) => {
-    if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) navLinks.classList.remove('open');
-  });
+    let allPhotos   = [];  // all file_ids fetched
+    let offset      = 0;   // how many rendered so far
+    let lastMsgId   = 0;   // for pagination
 
-  // ── Scroll reveal ─────────────────────────────
-  new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 }).observe(document.querySelector('.scroll-reveal'));
+    const grid        = document.getElementById('galleryGrid');
+    const loader      = document.getElementById('galleryLoader');
+    const emptyMsg    = document.getElementById('galleryEmpty');
+    const loadMoreWrap = document.getElementById('loadMoreWrap');
+    const loadMoreBtn  = document.getElementById('loadMoreBtn');
 
-  // ── Lightbox ──────────────────────────────────
-  const lightbox = document.getElementById('lightbox');
-  function openLightbox(src) { document.getElementById('lbImg').src = src; lightbox.classList.add('open'); }
-  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+    // ── 1. Fetch all photo messages from channel ─────────
+    async function fetchAllPhotos() {
+      let photos = [];
+      let fetchOffset = 0;
+      let keepGoing   = true;
 
-  // ══════════════════════════════════════════════
-  //  SUPABASE — Real backend, syncs all devices
-  // ══════════════════════════════════════════════
+      while (keepGoing) {
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${fetchOffset}&limit=100&allowed_updates=["channel_post"]`;
+        try {
+          const res  = await fetch(url);
+          const data = await res.json();
+          if (!data.ok || data.result.length === 0) { keepGoing = false; break; }
 
-  // INSERT a photo into Supabase
-  async function savePhoto(photo) {
-    const res = await fetch(SUPA_URL + '/rest/v1/photos', {
-      method: 'POST',
-      headers: { ...HEADERS, 'Prefer': 'return=representation' },
-      body: JSON.stringify({ url: photo.url, thumb: photo.thumb })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Save failed');
-    return data[0]; // returns saved row with real id
-  }
+          data.result.forEach(update => {
+            const post = update.channel_post;
+            if (post && post.chat && post.chat.username === CHANNEL.replace('@','') && post.photo) {
+              // pick highest resolution
+              const best = post.photo[post.photo.length - 1];
+              photos.push({ file_id: best.file_id, caption: post.caption || '' });
+            }
+            fetchOffset = update.update_id + 1;
+          });
 
-  // DELETE a photo from Supabase
-  async function deleteFromDB(id) {
-    await fetch(SUPA_URL + '/rest/v1/photos?id=eq.' + id, {
-      method: 'DELETE',
-      headers: HEADERS
-    });
-  }
-
-  // LOAD all photos — show cache instantly, refresh in background
-  async function loadFromDB() {
-    const CACHE_KEY  = 'sil_photos_v2';
-    const CACHE_TIME = 'sil_photos_time';
-    const cached     = localStorage.getItem(CACHE_KEY);
-    const cacheAge   = Date.now() - parseInt(localStorage.getItem(CACHE_TIME) || '0');
-
-    // Show cached photos INSTANTLY (under 10 min old)
-    if (cached && cacheAge < 600000) {
-      const photos = JSON.parse(cached);
-      // Refresh from Supabase silently in background
-      fetchAndUpdateCache(CACHE_KEY, CACHE_TIME).then(fresh => {
-        if (fresh && fresh.length !== photos.length) {
-          // New photos found — reload gallery silently
-          allPhotos = fresh; displayedN = 0;
-          document.getElementById('galleryGrid').innerHTML = '';
-          renderNextPage();
-        }
-      });
+          if (data.result.length < 100) keepGoing = false;
+        } catch (e) { keepGoing = false; }
+      }
       return photos;
     }
-    // No cache — fetch from Supabase
-    return await fetchAndUpdateCache(CACHE_KEY, CACHE_TIME);
-  }
 
-  async function fetchAndUpdateCache(CACHE_KEY, CACHE_TIME) {
-    const res = await fetch(SUPA_URL + '/rest/v1/photos?select=id,url,thumb&order=created_at.desc', {
-      headers: HEADERS
-    });
-    if (!res.ok) throw new Error('Load failed');
-    const photos = await res.json();
-    localStorage.setItem(CACHE_KEY, JSON.stringify(photos));
-    localStorage.setItem(CACHE_TIME, Date.now());
-    return photos;
-  }
+    // ── 2. Get actual download URL for a file_id ─────────
+    async function getFileUrl(file_id) {
+      const res  = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${file_id}`);
+      const data = await res.json();
+      if (data.ok) {
+        return `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
+      }
+      return null;
+    }
 
-  // ══════════════════════════════════════════════
-  //  RENDER
-  // ══════════════════════════════════════════════
-  function renderCard(photo, prepend = false) {
-    const grid = document.getElementById('galleryGrid');
-    const msg  = document.getElementById('galleryMsg');
-    if (msg) msg.remove();
+    // ── 3. Render a batch of photos ───────────────────────
+    async function renderBatch(photos) {
+      for (const photo of photos) {
+        const url = await getFileUrl(photo.file_id);
+        if (!url) continue;
 
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.dataset.id = photo.id;
+        // detect category from caption hashtags
+        const cap = (photo.caption || '').toLowerCase();
+        let cat = 'general';
+        if (cap.includes('#training'))    cat = 'training';
+        else if (cap.includes('#tournament')) cat = 'tournament';
+        else if (cap.includes('#event'))   cat = 'event';
 
-    // Use thumbnail (small) for grid, full URL only when opening lightbox
-    const thumb = photo.thumb || photo.url;
-    const full  = photo.url;
+        const item = document.createElement('div');
+        item.className = 'gallery-item scroll-reveal visible';
+        item.dataset.cat = cat;
+        item.innerHTML = `
+          <img src="${url}" alt="Gallery" loading="lazy" onerror="this.parentElement.style.display='none'"/>
+          <div class="gallery-item-overlay"><span class="view-btn">🔍 View</span></div>`;
+        item.querySelector('.view-btn').addEventListener('click', e => {
+          e.stopPropagation(); openLightbox(url);
+        });
+        item.querySelector('img').addEventListener('click', () => openLightbox(url));
+        grid.appendChild(item);
+      }
 
-    item.innerHTML = `
-      <img data-src="${thumb}" alt="Gallery" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3C/svg%3E" style="background:#1a1714;"/>
-      <div class="gallery-item-overlay">
-        <span style="font-size:10px;letter-spacing:1px;color:var(--gold);border:1px solid var(--gold);padding:5px 12px;cursor:pointer;background:rgba(0,0,0,0.5);">&#128269; VIEW</span>
-      </div>
-      <div class="del-btn" title="Delete">&#128465;</div>`;
+      // re-apply active filter
+      const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+      applyFilter(activeFilter);
+    }
 
-    // Lazy load with IntersectionObserver
-    const img = item.querySelector('img');
-    lazyObserver.observe(img);
+    // ── 4. Load more button ───────────────────────────────
+    async function loadMore() {
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.textContent = 'Loading...';
+      const batch = allPhotos.slice(offset, offset + BATCH_SIZE);
+      await renderBatch(batch);
+      offset += batch.length;
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = 'Load More';
+      if (offset >= allPhotos.length) loadMoreWrap.style.display = 'none';
+    }
 
-    item.querySelector('.gallery-item-overlay span').addEventListener('click', () => openLightbox(full));
-    img.addEventListener('click', () => openLightbox(full));
-    item.querySelector('.del-btn').addEventListener('click', () => deletePhoto(photo.id, item));
-
-    item.style.opacity = '0';
-    item.style.transition = 'opacity 0.4s ease';
-    if (prepend && grid.firstChild) grid.insertBefore(item, grid.firstChild);
-    else grid.appendChild(item);
-    requestAnimationFrame(() => { item.style.opacity = '1'; });
-  }
-
-  // Lazy load observer — only loads image when it enters viewport
-  const lazyObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        if (img.dataset.src) {
-          img.src = img.dataset.src;
-          img.removeAttribute('data-src');
-          lazyObserver.unobserve(img);
+    // ── 5. Filter logic ───────────────────────────────────
+    function applyFilter(filter) {
+      let visible = 0;
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        const cats = (item.dataset.cat || '').split(' ');
+        if (filter === 'all' || cats.includes(filter)) {
+          item.classList.remove('hidden'); visible++;
+        } else {
+          item.classList.add('hidden');
         }
-      }
+      });
+      emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilter(btn.dataset.filter);
+      });
     });
-  }, { rootMargin: '200px' }); // preload 200px before visible
 
-  async function deletePhoto(id, card) {
-    if (prompt('Admin password to delete:') !== ADMIN_PASS) { alert('Wrong password!'); return; }
-    card.style.cssText += 'opacity:0;transform:scale(0.8);transition:all 0.3s ease';
-    setTimeout(() => { card.remove(); }, 300);
-    allPhotos = allPhotos.filter(p => p.id !== id);
-    updateCount();
-    try { await deleteFromDB(id); } catch(e) { console.error('Delete failed:', e); }
-  }
-
-  function updateCount() {
-    const el = document.getElementById('photoCountTag');
-    if (el) el.textContent = allPhotos.length + ' photo' + (allPhotos.length !== 1 ? 's' : '');
-  }
-
-  function renderNextPage() {
-    const batch = allPhotos.slice(displayedN, displayedN + PAGE_SIZE);
-    batch.forEach(p => renderCard(p));
-    displayedN += batch.length;
-    updateCount();
-    const wrap = document.getElementById('loadMoreWrap');
-    const rem  = allPhotos.length - displayedN;
-    wrap.style.display = rem > 0 ? 'block' : 'none';
-    if (rem > 0) document.getElementById('loadMoreBtn').textContent = `Load More Photos (${rem} remaining)`;
-  }
-
-  async function loadGallery() {
-    const grid = document.getElementById('galleryGrid');
-    grid.innerHTML = '<div id="galleryMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;">&#9203; Loading gallery...</div>';
-    try {
-      allPhotos  = await loadFromDB();
-      displayedN = 0;
-      grid.innerHTML = '';
-      if (allPhotos.length === 0) {
-        grid.innerHTML = '<div id="galleryMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;">&#128248; No photos yet. Click &#128274; Admin Upload to add photos.</div>';
-        updateCount(); return;
-      }
-      renderNextPage();
-    } catch(err) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#e74c3c;font-size:13px;">&#10060; Could not load gallery. Check internet connection.</div>';
-      console.error(err);
-    }
-  }
-
-  document.getElementById('loadMoreBtn').addEventListener('click', renderNextPage);
-
-  // ══════════════════════════════════════════════
-  //  ADMIN UNLOCK
-  // ══════════════════════════════════════════════
-  document.getElementById('unlockBtn').addEventListener('click', () => {
-    if (prompt('Enter admin password:') !== ADMIN_PASS) { alert('Wrong password!'); return; }
-    document.getElementById('adminPanel').classList.add('open');
-    document.getElementById('unlockRow').style.display = 'none';
-    document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  // ── Tab switching ─────────────────────────────
-  document.querySelectorAll('.admin-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  // ══════════════════════════════════════════════
-  //  TAB 1 — UPLOAD DIRECTLY TO IMGBB + SUPABASE
-  // ══════════════════════════════════════════════
-  document.getElementById('photoInput').addEventListener('change', function() {
-    const el = document.getElementById('selectedCount');
-    el.textContent = `${this.files.length} photo${this.files.length !== 1 ? 's' : ''} selected`;
-    el.style.display = 'block';
-  });
-
-  const area = document.getElementById('uploadArea');
-  area.addEventListener('dragover',  (e) => { e.preventDefault(); area.classList.add('dragover'); });
-  area.addEventListener('dragleave', ()  => area.classList.remove('dragover'));
-  area.addEventListener('drop', (e) => {
-    e.preventDefault(); area.classList.remove('dragover');
-    document.getElementById('photoInput').files = e.dataTransfer.files;
-    const el = document.getElementById('selectedCount');
-    el.textContent = `${e.dataTransfer.files.length} photo(s) selected`;
-    el.style.display = 'block';
-  });
-
-  async function uploadToImgBB(file) {
-    const fd = new FormData();
-    fd.append('image', file);
-    const res  = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method:'POST', body:fd });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.error?.message || 'ImgBB upload failed');
-    return { url: json.data.url, thumb: json.data.thumb?.url || json.data.display_url };
-  }
-
-  document.getElementById('uploadBtn').addEventListener('click', async () => {
-    const pass = document.getElementById('uploadPass').value;
-    const msgS = document.getElementById('msgSuccess');
-    const msgE = document.getElementById('msgError');
-    const btn  = document.getElementById('uploadBtn');
-    const fill = document.getElementById('progressFill');
-    const pL   = document.getElementById('progressLeft');
-    const pR   = document.getElementById('progressRight');
-    msgS.style.display = msgE.style.display = 'none';
-
-    if (pass !== ADMIN_PASS) {
-      msgE.textContent = 'Wrong password.'; msgE.style.display = 'block';
-      setTimeout(() => msgE.style.display = 'none', 3000); return;
-    }
-    const files = Array.from(document.getElementById('photoInput').files);
-    if (!files.length) {
-      msgE.textContent = 'Please select photos first.'; msgE.style.display = 'block'; return;
-    }
-
-    btn.disabled = true; btn.textContent = 'Uploading...';
-    document.getElementById('progressWrap').style.display = 'block';
-
-    let done = 0, failed = 0;
-    for (let i = 0; i < files.length; i++) {
-      const pct = Math.round((i / files.length) * 100);
-      fill.style.width = pct + '%';
-      pL.textContent = `Uploading ${i+1} of ${files.length}`;
-      pR.textContent = pct + '%';
+    // ── 6. Init ───────────────────────────────────────────
+    (async () => {
       try {
-        // Step 1: Upload image to ImgBB
-        const imgData = await uploadToImgBB(files[i]);
-        // Step 2: Save URL to Supabase (real backend)
-        const saved = await savePhoto(imgData);
-        allPhotos = [saved, ...allPhotos];
-        // Bust cache so other devices get fresh photos
-        localStorage.removeItem('sil_photos_time');
-        renderCard(saved, true);
-        displayedN++; updateCount(); done++;
-      } catch(err) {
-        console.error(files[i].name, err.message);
-        failed++;
+        allPhotos = await fetchAllPhotos();
+        loader.style.display = 'none';
+
+        if (allPhotos.length === 0) {
+          emptyMsg.style.display = 'block';
+          return;
+        }
+
+        // render first batch
+        const first = allPhotos.slice(0, BATCH_SIZE);
+        await renderBatch(first);
+        offset = first.length;
+
+        // show load more if more photos exist
+        if (allPhotos.length > BATCH_SIZE) {
+          loadMoreWrap.style.display = 'block';
+        }
+
+      } catch (err) {
+        loader.style.display = 'none';
+        emptyMsg.textContent = 'Could not load gallery. Please try again.';
+        emptyMsg.style.display = 'block';
       }
-    }
-
-    fill.style.width = '100%';
-    pL.textContent = `Done! ${done} uploaded${failed ? ', '+failed+' failed':''}`;
-    pR.textContent = '100%';
-    btn.disabled = false; btn.textContent = 'Upload';
-    document.getElementById('photoInput').value = '';
-    document.getElementById('selectedCount').style.display = 'none';
-    document.getElementById('uploadPass').value = '';
-
-    if (done)   { msgS.textContent = `${done} photo${done>1?'s':''} uploaded! Visible on ALL devices instantly.`; msgS.style.display='block'; }
-    if (failed) { msgE.textContent = `${failed} photo(s) failed. Check internet and try again.`; msgE.style.display='block'; }
-    setTimeout(() => {
-      document.getElementById('progressWrap').style.display = 'none';
-      msgS.style.display = msgE.style.display = 'none';
-    }, 8000);
-  });
-
-  // ══════════════════════════════════════════════
-  //  TAB 2 — PASTE IMGBB HTML
-  // ══════════════════════════════════════════════
-  function extractUrls(raw) {
-    const urls = new Set();
-    const srcMatches = raw.matchAll(/src=["']([^"']+i\.ibb\.co[^"']+)["']/gi);
-    for (const m of srcMatches) urls.add(m[1].trim());
-    const plainMatches = raw.matchAll(/https?:\/\/i\.ibb\.co\/[^\s"'<>]+/gi);
-    for (const m of plainMatches) urls.add(m[0].trim());
-    return [...urls];
-  }
-
-  document.getElementById('previewBtn').addEventListener('click', () => {
-    const raw  = document.getElementById('pasteBox').value.trim();
-    const urls = extractUrls(raw);
-    const prev = document.getElementById('pastePreview');
-    const grid = document.getElementById('previewGrid');
-    const err  = document.getElementById('pasteError');
-    err.style.display = 'none';
-    if (!urls.length) {
-      err.textContent = 'No ImgBB image URLs found. Paste the HTML embed code or direct i.ibb.co links.';
-      err.style.display = 'block'; prev.style.display = 'none'; return;
-    }
-    grid.innerHTML = urls.map(u => `<img src="${u}" loading="lazy" onerror="this.style.opacity=0.3"/>`).join('');
-    prev.style.display = 'block';
-    document.getElementById('pasteSuccess').textContent = `Found ${urls.length} image${urls.length>1?'s':''} — click Add to Gallery to save.`;
-    document.getElementById('pasteSuccess').style.display = 'block';
-  });
-
-  document.getElementById('addPasteBtn').addEventListener('click', async () => {
-    const raw  = document.getElementById('pasteBox').value.trim();
-    const urls = extractUrls(raw);
-    const msgS = document.getElementById('pasteSuccess');
-    const msgE = document.getElementById('pasteError');
-    msgS.style.display = msgE.style.display = 'none';
-
-    if (!urls.length) {
-      msgE.textContent = 'No valid ImgBB URLs found.'; msgE.style.display = 'block'; return;
-    }
-
-    const existingUrls = new Set(allPhotos.map(p => p.url));
-    const newUrls = urls.filter(u => !existingUrls.has(u));
-
-    if (!newUrls.length) {
-      msgE.textContent = 'All these photos are already in the gallery.'; msgE.style.display = 'block'; return;
-    }
-
-    const btn = document.getElementById('addPasteBtn');
-    btn.disabled = true; btn.textContent = 'Saving...';
-
-    let saved = 0;
-    for (const url of newUrls) {
-      try {
-        const photo = await savePhoto({ url, thumb: url });
-        allPhotos = [photo, ...allPhotos];
-        renderCard(photo, true);
-        displayedN++; updateCount(); saved++;
-      } catch(e) { console.error('Paste save failed:', e); }
-    }
-
-    btn.disabled = false; btn.textContent = 'Add to Gallery';
-    msgS.textContent = `${saved} photo${saved>1?'s':''} added! Visible on all devices.`;
-    msgS.style.display = 'block';
-    document.getElementById('pasteBox').value = '';
-    document.getElementById('pastePreview').style.display = 'none';
-    setTimeout(() => msgS.style.display = 'none', 5000);
-  });
-
-  document.getElementById('clearPasteBtn').addEventListener('click', () => {
-    document.getElementById('pasteBox').value = '';
-    document.getElementById('pastePreview').style.display = 'none';
-    document.getElementById('pasteSuccess').style.display = 'none';
-    document.getElementById('pasteError').style.display = 'none';
-  });
-
-  // ══════════════════════════════════════════════
-  //  SYNC BUTTON — fresh load from Supabase
-  // ══════════════════════════════════════════════
-  document.getElementById('recoverBtn').addEventListener('click', async () => {
-    const btn = document.getElementById('recoverBtn');
-    btn.textContent = 'Syncing...'; btn.disabled = true;
-    await loadGallery();
-    btn.textContent = 'Synced!';
-    setTimeout(() => { btn.textContent = 'Sync Photos'; btn.disabled = false; }, 2000);
-  });
-
-  // ── Start ─────────────────────────────────────
-  loadGallery();
+    })();
   </script>
 </body>
 </html>

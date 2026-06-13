@@ -36,7 +36,7 @@
     <div class="hero-banner-overlay"></div>
   </header>
 
-  <!-- PROFILE SECTION (YouTube-style) -->
+  <!-- PROFILE SECTION -->
   <div class="profile-section">
     <div class="profile-logo-wrap">
       <img src="images/profile-logo.png" alt="Thekkan Pore Silamba Kalai" class="profile-logo" onerror="this.src='images/class-logo.png'"/>
@@ -48,15 +48,15 @@
     </div>
   </div>
 
-  <!-- ABOUT STRIP -->
+  <!-- ABOUT STRIP — counts auto-update from branches.js -->
   <section class="about-strip">
     <div class="strip-item">
-      <span class="strip-num">4</span>
+      <span class="strip-num" id="masterCount">—</span>
       <span class="strip-label">Masters</span>
     </div>
     <div class="strip-divider"></div>
     <div class="strip-item">
-      <span class="strip-num">3</span>
+      <span class="strip-num" id="branchCount">—</span>
       <span class="strip-label">Branches</span>
     </div>
     <div class="strip-divider"></div>
@@ -79,105 +79,46 @@
       <p class="section-desc">The legendary teachers who passed down the ancient art of Thekkan Pore Silambam to our masters</p>
     </div>
     <div style="display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-top:40px;">
-
-      <!-- Grand Master 1 -->
       <div class="scroll-reveal" style="text-align:center;">
         <div style="width:180px;height:180px;border-radius:8px;overflow:hidden;border:2px solid var(--gold);margin:0 auto 18px;box-shadow:0 0 30px rgba(201,168,76,0.2);">
-          <img src="images/grandmaster1.jpg" alt="Grand Master 1"
-            onerror="this.src='images/placeholder.jpg'"
-            style="width:100%;height:100%;object-fit:cover;"/>
+          <img src="images/grandmaster1.jpg" alt="Grand Master 1" onerror="this.src='images/placeholder.jpg'" style="width:100%;height:100%;object-fit:cover;"/>
         </div>
         <h3 style="font-family:'Cinzel',serif;font-size:16px;color:var(--text);margin-bottom:6px;">மதார் ராவுத்தர்</h3>
         <p style="font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;">Grand Master (LATE)</p>
       </div>
-
-      <!-- Grand Master 2 -->
       <div class="scroll-reveal" style="text-align:center;">
         <div style="width:180px;height:180px;border-radius:8px;overflow:hidden;border:2px solid var(--gold);margin:0 auto 18px;box-shadow:0 0 30px rgba(201,168,76,0.2);">
-          <img src="images/grandmaster2.jpg" alt="Grand Master 2"
-            onerror="this.src='images/placeholder.jpg'"
-            style="width:100%;height:100%;object-fit:cover;"/>
+          <img src="images/grandmaster2.jpg" alt="Grand Master 2" onerror="this.src='images/placeholder.jpg'" style="width:100%;height:100%;object-fit:cover;"/>
         </div>
         <h3 style="font-family:'Cinzel',serif;font-size:16px;color:var(--text);margin-bottom:6px;">J.சாகுல் ஹமீது</h3>
         <p style="font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;">Grand Master</p>
       </div>
-
     </div>
     <div style="text-align:center;margin-top:50px;border-bottom:1px solid var(--border);padding-bottom:0;"></div>
   </section>
 
-  <!-- MASTERS SECTION -->
+  <!-- MASTERS / BRANCHES SECTION — built dynamically from branches.js -->
   <section class="masters-section" id="masters">
     <div class="section-header">
       <p class="section-pre">Our Pillars</p>
       <h2 class="section-title">The Masters & Their Branches</h2>
       <p class="section-desc">Click on a master to explore their branch, story, and gallery</p>
     </div>
-    <div class="masters-grid masters-grid-3">
+    <div class="masters-grid masters-grid-3" id="mastersGrid">
+      <!-- Populated by branches.js → buildMastersGrid() -->
+    </div>
+  </section>
 
-      <!-- BRANCH I — 2 Masters side by side -->
-      <div class="master-card branch1-double" onclick="window.location='pages/branch1.html'" data-branch="1">
-        <div class="card-glow"></div>
-        <!-- Double photo row -->
-        <div class="double-img-row">
-          <div class="double-img-wrap">
-            <img src="images/master1.jpg" alt="Master 1" onerror="this.src='images/placeholder.jpg'" />
-            <div class="double-name">Thamim Ansari S</div>
-          </div>
-          <div class="double-divider"></div>
-          <div class="double-img-wrap">
-            <img src="images/master2.jpg" alt="Master 2" onerror="this.src='images/placeholder.jpg'" />
-            <div class="double-name">Jaipoon Nisha S</div>
-          </div>
-          <div class="card-overlay">
-            <span class="card-cta">Enter Branch →</span>
-          </div>
-        </div>
-        <div class="card-info">
-          <span class="card-branch">Otteri Extn Branch</span>
-          <h3 class="card-name" style="font-size:16px;">Thamim Ansari S &amp; Jaipoon Nisha S</h3>
-          <p class="card-location">📍 Otteri Extn, Chennai</p>
-          <div class="card-border-line"></div>
-          <p class="card-desc">Two masters, one tradition. Chief instructors and founders of Otteri Extn Branch, dedicated to preserving ancient silambam forms.</p>
-        </div>
-      </div>
-
-      <!-- BRANCH II — Master 3 -->
-      <div class="master-card" onclick="window.location='pages/branch2.html'" data-branch="2">
-        <div class="card-glow"></div>
-        <div class="card-img-wrap">
-          <img src="images/master3.jpg" alt="Master 3" onerror="this.src='images/placeholder.jpg'" />
-          <div class="card-overlay">
-            <span class="card-cta">Enter Branch →</span>
-          </div>
-        </div>
-        <div class="card-info">
-          <span class="card-branch">karasangal</span>
-          <h3 class="card-name">Rasool Mohideen M</h3>
-          <p class="card-location">📍 Karasangal, Chennai</p>
-          <div class="card-border-line"></div>
-          <p class="card-desc">Specialises in competitive silambam, producing state-level champions year after year.</p>
-        </div>
-      </div>
-
-      <!-- BRANCH III — Master 4 -->
-      <div class="master-card" onclick="window.location='pages/branch3.html'" data-branch="3">
-        <div class="card-glow"></div>
-        <div class="card-img-wrap">
-          <img src="images/master4.jpg" alt="Master 4" onerror="this.src='images/placeholder.jpg'" />
-          <div class="card-overlay">
-            <span class="card-cta">Enter Branch →</span>
-          </div>
-        </div>
-        <div class="card-info">
-          <span class="card-branch">vanchuvanchery</span>
-          <h3 class="card-name">Lakshmanan A</h3>
-          <p class="card-location">📍 Vanchuvanchery, Chennai</p>
-          <div class="card-border-line"></div>
-          <p class="card-desc">Focuses on youth development and cultural education through the martial art form.</p>
-        </div>
-      </div>
-
+  <!-- STUDENT BRANCHES SECTION — auto-hidden if no student branches yet -->
+  <section class="masters-section" id="studentBranchesSection" style="display:none;background:var(--dark2);border-top:1px solid var(--border);">
+    <div class="section-header">
+      <span class="student-section-label">Student Branches</span>
+      <p class="section-pre" style="margin-top:8px;">Growing the Legacy</p>
+      <h2 class="section-title" style="color:#ccc;">Our Student Branches</h2>
+      <p class="section-desc">Branches opened by students who trained under our masters — carrying the tradition forward</p>
+    </div>
+    <div class="masters-grid masters-grid-3" id="studentGrid">
+      <!-- Populated by branches.js → buildStudentGrid() -->
     </div>
   </section>
 
@@ -186,7 +127,7 @@
     <div class="quote-inner">
       <span class="quote-mark">"</span>
       <p class="quote-text">The stick is not just a weapon — it is an extension of the soul, trained through generations of warriors.</p>
-      <span class="quote-author">— Thekkan Pore Tradition —  </span>
+      <span class="quote-author">— Thekkan Pore Tradition —</span>
     </div>
   </section>
 
@@ -202,11 +143,10 @@
       <h3>Gallery</h3>
       <p>Moments of discipline, power, and grace</p>
     </a>
-       </a>
     <a href="pages/contact.html" class="ql-card">
       <div class="ql-icon">📍</div>
       <h3>Find Us</h3>
-      <p>All 4 branch locations and contact details</p>
+      <p>All branch locations and contact details</p>
     </a>
   </section>
 
@@ -230,10 +170,8 @@
       </div>
       <div class="footer-branches">
         <h4>Branches</h4>
-        <ul>
-          <li><a href="pages/branch1.html">Otteri Extn Branch</a></li>
-          <li><a href="pages/branch2.html">karasangal</a></li>
-          <li><a href="pages/branch3.html">vanchuvanchery</a></li>
+        <ul id="footerBranchList">
+          <!-- Populated by branches.js → buildFooterBranches() -->
         </ul>
       </div>
       <div class="footer-downloads">
@@ -247,6 +185,15 @@
     </div>
   </footer>
 
+  <script src="js/branches.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    // Build dynamic sections from BRANCHES data
+    buildMastersGrid();
+    buildStudentGrid();
+    buildFooterBranches('pages/');
+    injectBranchCount();
+    injectMasterCount();
+  </script>
 </body>
 </html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Branch Manager — Thekkan Pore Silamba Kalai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:      #0d0d0d;
+      --bg2:     #141414;
+      --bg3:     #1a1a1a;
+      --border:  #2a2a2a;
+      --gold:    #C9A84C;
+      --gold-dk: #9a7a30;
+      --text:    #e8e0d0;
+      --muted:   #888;
+      --green:   #4caf82;
+      --radius:  4px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .topbar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .topbar-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .topbar-sep { color: var(--border); }
+    .topbar-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      min-height: calc(100vh - 57px);
+    }
+    .panel-form {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 32px;
+      overflow-y: auto;
+    }
+    .panel-output {
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    /* ── Section headers ── */
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Form ── */
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 13px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 13px;
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--gold);
+    }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    /* Master blocks */
+    .master-block {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 18px;
+      margin-bottom: 12px;
+      border-radius: var(--radius);
+    }
+    .master-block-header {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .master-block .field { margin-bottom: 12px; }
+    .add-master-btn {
+      width: 100%;
+      padding: 9px;
+      background: transparent;
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      font-family: 'Raleway', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: var(--radius);
+      transition: all 0.2s;
+    }
+    .add-master-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .remove-master-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+      float: right;
+      line-height: 1;
+      margin-top: -2px;
+    }
+    .remove-master-btn:hover { color: #e05555; }
+
+    /* Generate button */
+    .gen-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--gold);
+      border: none;
+      color: #0d0d0d;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: var(--radius);
+      margin-top: 24px;
+      transition: background 0.2s;
+    }
+    .gen-btn:hover { background: #d9b85c; }
+
+    /* ── Output panel ── */
+    .output-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .output-tab {
+      padding: 9px 20px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: 'Raleway', sans-serif;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+    }
+    .output-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .output-pane { display: none; }
+    .output-pane.active { display: block; }
+
+    .code-block {
+      background: #111;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .code-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .code-content {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: #c8d8c8;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 5px 12px;
+      cursor: pointer;
+      border-radius: var(--radius);
+      font-family: 'Raleway', sans-serif;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+    .instruction-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .step-num {
+      min-width: 28px;
+      height: 28px;
+      background: var(--gold);
+      color: #0d0d0d;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .step-text { line-height: 1.7; color: var(--text); font-size: 13px; }
+    .step-text strong { color: var(--gold); }
+    .step-text code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: #c8d8c8;
+    }
+
+    .placeholder-msg {
+      text-align: center;
+      padding: 80px 40px;
+      color: var(--muted);
+    }
+    .placeholder-msg .icon { font-size: 40px; margin-bottom: 16px; }
+    .placeholder-msg p { line-height: 1.7; max-width: 320px; margin: 0 auto; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .panel-form { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">Thekkan Pore Silamba Kalai</span>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">Branch Manager</span>
+</div>
+
+<div class="layout">
+
+  <!-- LEFT: FORM -->
+  <div class="panel-form">
+    <div class="section-label">New Branch Details</div>
+
+    <div class="field">
+      <label>Branch Type</label>
+      <select id="branchType" onchange="toggleTrainedUnder()">
+        <option value="student">Student Branch (opened by a student)</option>
+        <option value="main">Main Branch (opened by a master)</option>
+      </select>
+      <p class="hint">Student branches appear in a separate silver-styled section on the home &amp; contact pages.</p>
+    </div>
+
+    <div class="field" id="trainedUnderField">
+      <label>Trained Under (which master?)</label>
+      <select id="trainedUnder">
+        <option value="Thamim Ansari S">Thamim Ansari S — Otteri Extn</option>
+        <option value="Jaipoon Nisha S">Jaipoon Nisha S — Otteri Extn</option>
+        <option value="Rasool Mohideen M">Rasool Mohideen M — Karasangal</option>
+        <option value="Lakshmanan A">Lakshmanan A — Vanchuvanchery</option>
+      </select>
+      <p class="hint">The master who trained this branch's instructor.</p>
+    </div>
+
+    <div class="field">
+      <label>Branch Number (next available)</label>
+      <input type="number" id="branchId" value="4" min="1"/>
+      <p class="hint">Current branches: 1 (Otteri Extn), 2 (Karasangal), 3 (Vanchuvanchery)</p>
+    </div>
+
+    <div class="field">
+      <label>Branch Name</label>
+      <input type="text" id="branchName" placeholder="e.g. Ambattur Branch"/>
+    </div>
+
+    <div class="field">
+      <label>Location (Area, City)</label>
+      <input type="text" id="branchLocation" placeholder="e.g. Ambattur, Chennai"/>
+    </div>
+
+    <div class="field">
+      <label>Training Schedule</label>
+      <input type="text" id="branchSchedule" placeholder="e.g. SAT: 6AM – 8AM · SUN: 6AM – 8AM"/>
+    </div>
+
+    <div class="field">
+      <label>Short Description (for home page card)</label>
+      <textarea id="branchAbout" placeholder="Brief description of this branch's focus and speciality..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Phone Numbers (one per line)</label>
+      <textarea id="branchPhones" placeholder="+91 9876543210&#10;+91 9876543211" style="min-height:60px;"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Email Addresses (one per line)</label>
+      <textarea id="branchEmails" placeholder="thekkanporesilambakalai05@gmail.com" style="min-height:60px;"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Instagram Handle (without @)</label>
+      <input type="text" id="branchInsta" placeholder="tpsk_branchname"/>
+    </div>
+
+    <div class="section-label" style="margin-top:28px;">Masters</div>
+    <div id="mastersList"></div>
+    <button class="add-master-btn" onclick="addMaster()">+ Add Another Master</button>
+
+    <button class="gen-btn" onclick="generate()">Generate Code →</button>
+  </div>
+
+  <!-- RIGHT: OUTPUT -->
+  <div class="panel-output">
+    <div id="placeholder" class="placeholder-msg">
+      <div class="icon">🏛️</div>
+      <p>Fill in the branch details on the left, then click <strong style="color:var(--gold)">Generate Code</strong> to get ready-to-paste snippets for every file.</p>
+    </div>
+
+    <div id="outputArea" style="display:none;">
+      <div class="output-tabs">
+        <button class="output-tab active" onclick="switchTab('instructions')">How to Add</button>
+        <button class="output-tab" onclick="switchTab('branchesjs')">branches.js entry</button>
+        <button class="output-tab" onclick="switchTab('branchhtml')">branchN.html</button>
+      </div>
+
+      <!-- INSTRUCTIONS TAB -->
+      <div class="output-pane active" id="tab-instructions">
+        <div id="stepsList"></div>
+      </div>
+
+      <!-- BRANCHES.JS TAB -->
+      <div class="output-pane" id="tab-branchesjs">
+        <div class="code-block">
+          <div class="code-label">Add this entry to the BRANCHES array in js/branches.js</div>
+          <button class="copy-btn" onclick="copyCode(this,'branchesJsCode')">Copy</button>
+          <div class="code-content" id="branchesJsCode"></div>
+        </div>
+      </div>
+
+      <!-- BRANCH HTML TAB -->
+      <div class="output-pane" id="tab-branchhtml">
+        <div class="code-block">
+          <div class="code-label">Save as pages/branchN.html (replace N with branch number)</div>
+          <button class="copy-btn" onclick="copyCode(this,'branchHtmlCode')">Copy</button>
+          <div class="code-content" id="branchHtmlCode"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── Toggle trainedUnder field based on branch type ──
+  function toggleTrainedUnder() {
+    const type = document.getElementById('branchType').value;
+    document.getElementById('trainedUnderField').style.display = type === 'student' ? 'block' : 'none';
+  }
+  toggleTrainedUnder(); // run on load
+
+  // ── Master fields ──
+  let masterCount = 0;
+
+  function addMaster() {
+    masterCount++;
+    const n = masterCount;
+    const div = document.createElement('div');
+    div.className = 'master-block';
+    div.id = 'masterBlock' + n;
+    div.innerHTML = `
+      <div class="master-block-header">
+        Master ${n}
+        ${n > 1 ? `<button class="remove-master-btn" onclick="removeMaster(${n})">×</button>` : ''}
+      </div>
+      <div class="field">
+        <label>Master Name</label>
+        <input type="text" id="masterName${n}" placeholder="Full Name"/>
+      </div>
+      <div class="field">
+        <label>Image Filename</label>
+        <input type="text" id="masterImg${n}" placeholder="e.g. master5.jpg"/>
+        <p class="hint">Place this image in the /images/ folder of your project</p>
+      </div>
+      <div class="field">
+        <label>Role</label>
+        <input type="text" id="masterRole${n}" value="Chief Instructor"/>
+      </div>
+      <div class="field">
+        <label>Biography (for branch page)</label>
+        <textarea id="masterBio${n}" placeholder="Write the master's story here..."></textarea>
+      </div>`;
+    document.getElementById('mastersList').appendChild(div);
+  }
+
+  function removeMaster(n) {
+    const el = document.getElementById('masterBlock' + n);
+    if (el) el.remove();
+  }
+
+  // Start with one master
+  addMaster();
+
+  // ── Tab switching ──
+  function switchTab(name) {
+    document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.output-pane').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  // ── Copy button ──
+  function copyCode(btn, id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Copied';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // ── Helpers ──
+  function esc(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+  function lines(id) { return val(id).split('\n').map(l => l.trim()).filter(Boolean); }
+
+  // ── Generate ──
+  function generate() {
+    const id          = parseInt(val('branchId')) || 4;
+    const branchType  = val('branchType') || 'student';
+    const trainedUnder = branchType === 'student' ? (document.getElementById('trainedUnder')?.value || '') : '';
+    const name        = val('branchName') || 'New Branch';
+    const location  = val('branchLocation') || 'Area, Chennai';
+    const schedule  = val('branchSchedule') || 'SAT & SUN: 6AM – 8AM';
+    const about     = val('branchAbout') || 'Dedicated to preserving the ancient art of Thekkan Pore Silambam.';
+    const phones    = lines('branchPhones');
+    const emails    = lines('branchEmails');
+    const insta     = val('branchInsta') || 'thekkanporesilambam';
+    const file      = `branch${id}.html`;
+
+    // Collect masters
+    const masters = [];
+    document.querySelectorAll('.master-block').forEach(block => {
+      const n = block.id.replace('masterBlock','');
+      const mName = val(`masterName${n}`);
+      const mImg  = val(`masterImg${n}`) || `master${id}.jpg`;
+      const mRole = val(`masterRole${n}`) || 'Chief Instructor';
+      const mBio  = val(`masterBio${n}`) || 'Biography coming soon.';
+      if (mName) masters.push({ name: mName, image: mImg, role: mRole, bio: mBio });
+    });
+    if (masters.length === 0) masters.push({ name: 'Master Name', image: `master${id}.jpg`, role: 'Chief Instructor', bio: 'Biography coming soon.' });
+
+    // ── branches.js snippet ──
+    const phonesJson  = phones.map(p => `"${p}"`).join(', ');
+    const emailsJson  = emails.map(e => `"${e}"`).join(', ');
+    const mastersJson = masters.map(m =>
+      `    { name: "${m.name}", image: "${m.image}", role: "${m.role}" }`
+    ).join(',\n');
+    const trainedLine = branchType === 'student' ? `\n  trainedUnder: "${trainedUnder}",` : '';
+    const jsEntry = `,{
+  id: ${id},
+  type: "${branchType}",
+  file: "${file}",
+  name: "${name}",
+  location: "${location}",${trainedLine}
+  masters: [
+${mastersJson}
+  ],
+  phone: [${phonesJson}],
+  email: [${emailsJson}],
+  schedule: "${schedule}",
+  instagram: "${insta}",
+  about: "${about}"
+}`;
+    document.getElementById('branchesJsCode').textContent = jsEntry;
+
+    // ── Branch HTML ──
+    const masterProfiles = masters.map(m => `
+    <div class="master-profile scroll-reveal">
+      <div class="master-profile-img">
+        <img src="../images/${m.image}" alt="${esc(m.name)}" onerror="this.src='../images/placeholder.jpg'"/>
+      </div>
+      <div class="master-profile-info">
+        <h2>${esc(m.name)}</h2>
+        <span class="branch-tag">${esc(m.role)} · ${esc(name)}</span>
+        <p>${esc(m.bio)}</p>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="label">Location</div>
+            <div class="value">${esc(location)}</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Training Days</div>
+            <div class="value">${esc(schedule)}</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Contact</div>
+            <div class="value">${esc(phones[0] || '+91 XXXXXXXXXX')}</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Students</div>
+            <div class="value">XX Active</div>
+          </div>
+        </div>
+      </div>
+    </div>`).join('\n');
+
+    const galleryItems = [1,2,3,4].map(n => `
+        <div class="gallery-item">
+          <img src="../images/branch${id}-${n}.jpg" alt="${esc(name)} Photo" onerror="this.parentElement.style.display='none'" loading="lazy"/>
+          <div class="gallery-item-overlay"><span>View</span></div>
+        </div>`).join('');
+
+    const branchHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>${esc(name)} — Thekkan Pore Silamba Kalai</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <img src="../images/class-logo.png" alt="Silambam Class Logo" class="nav-class-logo" onerror="this.style.display='none'"/>
+      <div class="nav-logo-text">
+        <span class="logo-tamil">THEKKAN PORE</span>
+        <span class="logo-sub">SILAMBA KALAI</span>
+      </div>
+    </div>
+    <div class="nav-toggle" id="navToggle">☰</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="origin.html">Origin</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="branch-hero-img">
+      <img src="../images/banner.jpg" alt="Thekkan Pore Silamba Kalai Banner" onerror="this.style.display='none'"/>
+    </div>
+    <div class="page-hero-content">
+      <p class="section-pre">Thekkan Pore Silamba Kalai</p>
+      <h1><span>${esc(name)}</span></h1>
+      <p style="color:var(--text-muted);font-size:14px;letter-spacing:2px;margin-top:12px;">${esc(location)}</p>
+    </div>
+  </div>
+
+  <div class="section-block">
+${masterProfiles}
+
+    <!-- ABOUT -->
+    <div class="scroll-reveal" style="margin-bottom:60px;">
+      <div class="section-header" style="text-align:left;">
+        <p class="section-pre">About</p>
+        <h2 class="section-title">Branch Overview</h2>
+      </div>
+      <p style="color:var(--text-muted);line-height:1.9;font-size:15px;">${esc(about)}</p>
+    </div>
+
+    <!-- GALLERY — add images named branch${id}-1.jpg, branch${id}-2.jpg etc. to /images/ -->
+    <div class="scroll-reveal" style="margin-bottom:60px;">
+      <div class="section-header" style="text-align:left;">
+        <p class="section-pre">Branch Photos</p>
+        <h2 class="section-title">Gallery</h2>
+      </div>
+      <div class="gallery-grid">${galleryItems}
+      </div>
+    </div>
+
+    <!-- OTHER BRANCHES -->
+    <div class="scroll-reveal" style="margin-top:60px;padding-top:40px;border-top:1px solid var(--border);">
+      <p class="section-pre" style="text-align:center;margin-bottom:20px;">Explore Other Branches</p>
+      <div id="otherBranchLinks" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h2>THEKKAN PORE<br/><span>Silamba Kalai</span></h2>
+        <p>Preserving the warrior tradition of Tamil Nadu since generations.</p>
+        <a href="https://instagram.com/thekkanporesilambam_otteri" target="_blank" class="insta-link">📸 @thekkanporesilambam_otteri</a>
+      </div>
+      <div class="footer-links">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="origin.html">Origin</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="training.html">Training</a></li>
+          <li><a href="media.html">Media & Downloads</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-branches">
+        <h4>Branches</h4>
+        <ul id="footerBranchList"></ul>
+      </div>
+      <div class="footer-downloads">
+        <h4>Downloads</h4>
+        <a href="../pdfs/entry-form.pdf" class="pdf-btn" download>📄 Entry Form</a>
+        <a href="../pdfs/rules.pdf" class="pdf-btn" download>📄 Rules & Regulations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Thekkan Pore Silamba Kalai. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/branches.js"><\/script>
+  <script src="../js/main.js"><\/script>
+  <script>
+    buildFooterBranches('');
+    const currentFile = window.location.pathname.split('/').pop();
+    const linksDiv = document.getElementById('otherBranchLinks');
+    if (linksDiv) {
+      BRANCHES.filter(b => b.file !== currentFile).forEach(b => {
+        const a = document.createElement('a');
+        a.href = b.file; a.className = 'hero-btn'; a.style.fontSize = '11px';
+        a.textContent = b.name + ' →';
+        linksDiv.appendChild(a);
+      });
+    }
+  <\/script>
+</body>
+</html>`;
+    document.getElementById('branchHtmlCode').textContent = branchHtml;
+
+    // ── Instructions ──
+    const phoneList = phones.length ? phones.join(', ') : '+91 XXXXXXXXXX';
+    const masterImgList = masters.map(m => `<code>${m.image}</code>`).join(', ');
+    document.getElementById('stepsList').innerHTML = `
+      <div class="instruction-step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Add master images</strong><br>
+          Place ${masterImgList} into your <code>/images/</code> folder.
+          Also add branch photos as <code>branch${id}-1.jpg</code>, <code>branch${id}-2.jpg</code>, etc.
+        </div>
+      </div>
+      <div class="instruction-step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>Update branches.js</strong><br>
+          Open <code>js/branches.js</code>. Find the comment <em>"ADD NEW BRANCHES BELOW THIS LINE"</em>.
+          Paste the entry from the <strong style="color:var(--gold)">branches.js entry</strong> tab just above that comment (inside the BRANCHES array, after the last <code>}</code>).
+        </div>
+      </div>
+      <div class="instruction-step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Create the branch page</strong><br>
+          Go to the <strong style="color:var(--gold)">branchN.html</strong> tab, copy the code, and save it as <code>pages/${file}</code> in your project.
+        </div>
+      </div>
+      <div class="instruction-step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          <strong>That's it!</strong><br>
+          The new branch will automatically appear on the <strong>Home page</strong> master grid,
+          <strong>Contact</strong> page (location card + master directory), and every
+          <strong>footer's Branches list</strong> — no other files to edit.
+        </div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);padding:20px;border-radius:4px;margin-top:10px;">
+        <div style="font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">Summary — ${esc(name)}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;color:var(--muted);">
+          <div>Type: <span style="color:${branchType==='student'?'#aaa':'var(--gold)'};">${branchType==='student'?'Student Branch':'Main Branch'}</span></div>
+          <div>File: <span style="color:var(--text);">${file}</span></div>
+          ${branchType==='student'?`<div>Trained under: <span style="color:var(--text);">${esc(trainedUnder)}</span></div>`:''}
+          <div>Location: <span style="color:var(--text);">${esc(location)}</span></div>
+          <div>Masters: <span style="color:var(--text);">${masters.map(m=>m.name).join(', ')}</span></div>
+          <div>Phone: <span style="color:var(--text);">${esc(phoneList)}</span></div>
+          <div>Schedule: <span style="color:var(--text);">${esc(schedule)}</span></div>
+          <div>Instagram: <span style="color:var(--text);">@${esc(insta)}</span></div>
+        </div>
+      </div>`;
+
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('outputArea').style.display = 'block';
+
+    // Switch to instructions tab
+    document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.output-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.output-tab')[0].classList.add('active');
+    document.getElementById('tab-instructions').classList.add('active');
+  }
+</script>
+</body>
+</html>

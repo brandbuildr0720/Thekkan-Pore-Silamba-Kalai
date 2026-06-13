@@ -36,55 +36,31 @@
 
   <div class="section-block">
 
-    <!-- ALL 4 BRANCHES -->
+    <!-- ALL BRANCHES — built from branches.js -->
     <div class="scroll-reveal" style="margin-bottom:80px;">
       <div class="section-header">
-        <p class="section-pre">All Branches</p>
-        <h2 class="section-title">Our 4 Training Centers</h2>
+        <p class="section-pre">Main Branches</p>
+        <h2 class="section-title">Our Training Centers</h2>
       </div>
-      <div class="locations-grid">
-
-        <div class="location-card scroll-reveal">
-          <h3>Otteri Extn Branch <span style="font-size:12px;color:var(--text-muted);font-family:'Raleway',sans-serif;font-weight:300;">— 2 Masters</span></h3>
-          <p class="loc-master">Thamim Ansari S &amp; Jaipoon Nisha S</p>
-          <p>📍 Full Address, Street Name</>City, Tamil Nadu — PIN</p>
-          <p>📞 <a href="tel:+919677210757">+91 9677210757  ,  +91 7299947188</a></p>
-          <p>📧 <a href="mailto:thekkanporesilambakalai01@gmail.com  ,  thekkanporesilambakalai02@gmail.com">thekkanporesilambakalai01@gmail.com <br>  📧 thekkanporesilambakalai02@gmail.com</a></p>
-          <p>🕐  SAT: 6AM - 7.30AM <br> 🕐 SUN :7AM - 9+AM</p>
-          <div style="margin-top:16px;">
-            <a href="branch1.html" style="font-size:11px;letter-brspacing:2px;color:var(--gold);text-transform:uppercase;border:1px solid var(--border);padding:8px 16px;transition:var(--transition);">View Branch →</a>
-          </div>
-        </div>
-
-        <div class="location-card scroll-reveal">
-          <h3>karasangal</h3>
-          <p class="loc-master">RASOOL MOHIDEEN M · Chief Instructor</p>
-          <p>📍 Full Address, Street Name<br/>City, Tamil Nadu — PIN</p>
-          <p>📞 <a href="tel:+919445903440">+91 9445903440</a></p>
-          <p>📧 <a href="mailto:thekkanporesilambakalai03@gmail.com">thekkanporesilambakalai03@gmail.com</a></p>
-          <p>🕐 SAT: 6.30AM - 8AM<br>🕐 SUN: 6.30 AM - 8AM</p>
-          <div style="margin-top:16px;">
-            <a href="branch2.html" style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;border:1px solid var(--border);padding:8px 16px;transition:var(--transition);">View Branch →</a>
-          </div>
-        </div>
-
-        <div class="location-card scroll-reveal">
-          <h3>VANCHUVANCHERY</h3>
-          <p class="loc-master">LAKSHMANAN A</p>
-          <p>📍 Full Address, Street Name<br/>City, Tamil Nadu — PIN</p>
-          <p>📞 <a href="tel:+919094942226">+91 9094942226</a></p>
-          <p>📧 <a href="mailto:thekkanporesilambakalai04@gmail.com">thekkanporesilambakalai04@gmail.com</a></p>
-          <p>🕐 SAT: 6AM-7.30AM <br> 🕐 SUN :6AM-7.30AM </p>
-          <div style="margin-top:16px;">
-            <a href="branch3.html" style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;border:1px solid var(--border);padding:8px 16px;transition:var(--transition);">View Branch →</a>
-          </div>
-        </div>
-
-
+      <div class="locations-grid" id="locationsGrid">
+        <!-- Populated by branches.js → buildLocationCards() -->
       </div>
     </div>
 
-    <!-- MASTERS DIRECTORY -->
+    <!-- STUDENT BRANCHES — auto-hidden if none yet -->
+    <div class="student-contact-section scroll-reveal" style="margin-bottom:80px;">
+      <div class="section-header">
+        <span class="student-section-label">Student Branches</span>
+        <p class="section-pre" style="margin-top:8px;">Growing the Legacy</p>
+        <h2 class="section-title" style="color:#ccc;">Student Branches</h2>
+        <p class="section-desc">Branches run by trained students of our masters</p>
+      </div>
+      <div class="locations-grid" id="studentLocationsGrid">
+        <!-- Populated by branches.js → buildStudentLocationCards() -->
+      </div>
+    </div>
+
+    <!-- MASTERS DIRECTORY — built from branches.js -->
     <div class="scroll-reveal" style="margin-bottom:80px;">
       <div class="section-header">
         <p class="section-pre">Our Masters</p>
@@ -100,38 +76,14 @@
               <th style="padding:16px 20px;text-align:left;font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;">Instagram</th>
             </tr>
           </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid var(--border);">
-              <td style="padding:16px 20px;color:var(--text);font-size:14px;">Thamim Ansari S</td>
-              <td style="padding:16px 20px;color:var(--text-muted);font-size:13px;">Otteri Extn Branch</td>
-              <td style="padding:16px 20px;"><a href="tel:+919677210575" style="color:var(--gold);font-size:13px;">+91 9677210575</a></td>
-              <td style="padding:16px 20px;"><a href="https://instagram.com/thekkanporesilambam_otteri" target="_blank" style="color:var(--gold);font-size:13px;">@thekkanporesilambam_otteri</a></td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border);">
-              <td style="padding:16px 20px;color:var(--text);font-size:14px;">Jaipoon Nisha S</td>
-              <td style="padding:16px 20px;color:var(--text-muted);font-size:13px;">Otteri Extn Branch</td>
-              <td style="padding:16px 20px;"><a href="tel:+917299947188" style="color:var(--gold);font-size:13px;">+91 7299947188</a></td>
-              <td style="padding:16px 20px;"><a href="https://instagram.com/thekkanporesilambam_otteri" target="_blank" style="color:var(--gold);font-size:13px;">@thekkanporesilambam_otteri</a></td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border);">
-              <td style="padding:16px 20px;color:var(--text);font-size:14px;">Rasool Mohideen M</td>
-              <td style="padding:16px 20px;color:var(--text-muted);font-size:13px;"> karasangal branch</td>
-              <td style="padding:16px 20px;"><a href="tel:+919445903440" style="color:var(--gold);font-size:13px;">+91 9445903440</a></td>
-              <td style="padding:16px 20px;"><a href="https://instagram.com/thekkanporesilambam_karasangal" target="_blank" style="color:var(--gold);font-size:13px;">@thekkanporesilambam_karasangal</a></td>
-            </tr>
-            </tr>
-            <tr>
-              <td style="padding:16px 20px;color:var(--text);font-size:14px;">Lakshmanan A</td>
-              <td style="padding:16px 20px;color:var(--text-muted);font-size:13px;">vanchuvanchery branch </td>
-              <td style="padding:16px 20px;"><a href="tel:+919094942226" style="color:var(--gold);font-size:13px;">+91 9094942226</a></td>
-              <td style="padding:16px 20px;"><a href="https://instagram.com/tpsk_vanchuvanchery" target="_blank" style="color:var(--gold);font-size:13px;">@tpsk_vanchuvanchery</a></td>
-            </tr>
+          <tbody id="masterTableBody">
+            <!-- Populated by branches.js → buildMasterTable() -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- CLASS INSTAGRAM + DOWNLOADS -->
+    <!-- INSTAGRAM + DOWNLOADS -->
     <div class="scroll-reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:40px;">
       <div style="background:var(--dark3);border:1px solid var(--border);padding:30px;text-align:center;">
         <div style="font-size:40px;margin-bottom:16px;">📸</div>
@@ -171,10 +123,8 @@
       </div>
       <div class="footer-branches">
         <h4>Branches</h4>
-        <ul>
-          <li><a href="branch1.html">Otteri Extn Branch</a></li>
-          <li><a href="branch2.html">karasangal branch</a></li>
-          <li><a href="branch3.html">vanchuvanchery Branch</a></li>
+        <ul id="footerBranchList">
+          <!-- Populated by branches.js -->
         </ul>
       </div>
       <div class="footer-downloads">
@@ -187,6 +137,14 @@
       <p>© 2025 Thekkan Pore Silamba Kalai. All rights reserved.</p>
     </div>
   </footer>
+
+  <script src="../js/branches.js"></script>
   <script src="../js/main.js"></script>
+  <script>
+    buildLocationCards('');
+    buildStudentLocationCards('');
+    buildMasterTable();
+    buildFooterBranches('');
+  </script>
 </body>
 </html>

@@ -163,14 +163,14 @@
       </p>
     </div>
 
-    <!-- NAV TO OTHER BRANCHES -->
+    <!-- OTHER BRANCHES NAV — auto-populated from branches.js -->
     <div class="scroll-reveal" style="margin-top:60px;padding-top:40px;border-top:1px solid var(--border);">
       <p class="section-pre" style="text-align:center;margin-bottom:20px;">Explore Other Branches</p>
-      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-        <a href="branch2.html" class="hero-btn" style="font-size:11px;">karasangal →</a>
-        <a href="branch3.html" class="hero-btn" style="font-size:11px;">vanchuvanchery→</a>
+      <div id="otherBranchLinks" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <!-- Populated by branches.js -->
       </div>
     </div>
+  </div>
   </div>
 
   <!-- FOOTER -->
@@ -193,11 +193,7 @@
       </div>
       <div class="footer-branches">
         <h4>Branches</h4>
-        <ul>
-          <li><a href="branch1.html">Otteri Extn Branch</a></li>
-          <li><a href="branch2.html">karasangal</a></li>
-          <li><a href="branch3.html">vanchuvanchery</a></li>
-        </ul>
+        <ul id="footerBranchList"></ul>
       </div>
       <div class="footer-downloads">
         <h4>Downloads</h4>
@@ -210,6 +206,22 @@
     </div>
   </footer>
 
+  <script src="../js/branches.js"></script>
   <script src="../js/main.js"></script>
+  <script>
+    buildFooterBranches('');
+    const currentFile = window.location.pathname.split('/').pop();
+    const linksDiv = document.getElementById('otherBranchLinks');
+    if (linksDiv) {
+      BRANCHES.filter(b => b.file !== currentFile).forEach(b => {
+        const a = document.createElement('a');
+        a.href = b.file;
+        a.className = 'hero-btn';
+        a.style.fontSize = '11px';
+        a.textContent = b.name + ' →';
+        linksDiv.appendChild(a);
+      });
+    }
+  </script>
 </body>
 </html>
